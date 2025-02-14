@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>영화 추가</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+
+<header class="cgv-header">
+    <div class="container-fluid px-4 py-3 d-flex align-items-center justify-content-between">
+        <a href="/" class="cgv-logo text-decoration-none d-flex align-items-center">
+            <img src="/images/cgv-logo.png" alt="CGV Logo" class="cgv-logo-image me-2">
+            <h1 class="m-0">CGV</h1>
+        </a>
+        <nav class="d-flex">
+            <a href="/movies" class="nav-link text-white mx-3">영화 목록</a>
+            <a href="/theaters" class="nav-link text-white mx-3">극장 목록</a>
+            <a href="/contact" class="nav-link text-white mx-3">고객 센터</a>
+        </nav>
+    </div>
+</header>
+
+<div class="container form-container mt-5">
+    <h1 class="form-title">영화 추가</h1>
+    <form th:action="@{/theater-movies/add}" method="post">
+        <!-- 극장 선택 -->
+        <div class="form-group mb-4">
+            <label for="theater" class="form-label">극장</label>
+            <select id="theater" name="theaterId" class="form-select shadow-sm">
+                <option value="" disabled selected>극장을 선택하세요</option>
+                <option th:each="theater : ${theater}"
+                        th:value="${theater.id}"
+                        th:text="${theater.name}"></option>
+            </select>
+        </div>
+
+        <!-- 영화 선택 -->
+        <div class="form-group mb-4">
+            <label for="movies" class="form-label">영화</label>
+            <select id="movies" name="movieIds" class="form-select shadow-sm" multiple>
+                <option th:each="movie : ${movies}"
+                        th:value="${movie.id}"
+                        th:text="${movie.title}"></option>
+            </select>
+            <small class="form-text text-muted">여러 영화를 선택하려면 Ctrl(Windows) 또는 Command(Mac)을 누른 상태에서 클릭하세요.</small>
+        </div>
+
+        <!-- 제출 버튼 -->
+        <button type="submit" class="btn btn-primary w-100 py-2 shadow">추가</button>
+    </form>
+</div>
+
+<style>
+    body {
+        background-color: #121212;
+        color: #e0e0e0;
+        font-family: 'Roboto', sans-serif;
+    }
+    .cgv-header {
+        background: linear-gradient(to right, #ff6f61, #d84315);
+        box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.3);
+        position: sticky;
+        top: 0;
+        z-index: 1000;
+    }
+    .cgv-logo h1 {
+        color: #ffffff;
+        font-size: 1.8em;
+        font-weight: bold;
+        margin: 0;
+    }
+    .cgv-logo-image {
+        width: 45px;
+        height: 45px;
+    }
+    .nav-link {
+        font-size: 1.2em;
+        font-weight: 600;
+        color: #ffffff;
+        transition: color 0.3s ease;
+    }
+    .nav-link:hover {
+        color: #ffcdd2;
+    }
+    .container {
+        max-width: 720px;
+        padding: 20px;
+        background: #1e1e1e;
+        border-radius: 10px;
+        box-shadow: 0px 8px 25px rgba(0, 0, 0, 0.5);
+    }
+    .form-title {
+        color: #ff8a65;
+        text-align: center;
+        font-size: 2.2em;
+        margin-bottom: 30px;
+        font-weight: 700;
+    }
+    .form-group label {
+        color: #e0e0e0;
+        font-weight: bold;
+        font-size: 1.1em;
+    }
+    .form-control, .form-select {
+        background-color: #2c2c2c;
+        border: 1px solid #424242;
+        color: #e0e0e0;
+        border-radius: 6px;
+        padding: 12px;
+    }
+    .form-control:focus, .form-select:focus {
+        border-color: #ff8a65;
+        box-shadow: 0px 0px 10px rgba(255, 138, 101, 0.5);
+    }
+    .btn-primary {
+        background-color: #ff6f61;
+        border-color: #d84315;
+        font-size: 1.2em;
+        font-weight: bold;
+        transition: background-color 0.3s ease;
+    }
+    .btn-primary:hover {
+        background-color: #e64a19;
+    }
+</style>
+
+</body>
+</html>

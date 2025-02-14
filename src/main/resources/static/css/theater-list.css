@@ -1,0 +1,64 @@
+.theater-box {
+    padding: 20px;
+    background-color: #666; /* 밝은 회색 (검정에 가까움) */
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.theater-title {
+    font-size: 1.5rem;
+    font-weight: bold;
+    margin-bottom: 10px;
+    text-align: center;
+    color: #ffffff; /* 제목은 흰색으로 유지 */
+}
+
+.theater-list {
+    display: flex;
+    flex-wrap: wrap; /* 줄 바꿈 허용 */
+    gap: 10px; /* 항목 간 간격 */
+    padding: 10px 0;
+}
+
+.theater-list a:first-child {
+    margin-left: 15px; /* 왼쪽 간격을 추가 */
+    padding-left: 10px; /* 내부 여백을 추가 */
+}
+
+.theater-list a {
+    position: relative;
+    display: inline-block;
+    padding-right: 10px; /* 오른쪽 여백 */
+    text-decoration: none; /* 밑줄 제거 */
+    color: #f0f0f0; /* 기본 텍스트 색상 */
+}
+
+.theater-list a::after {
+    content: '|'; /* 작대기 추가 */
+    position: absolute;
+    right: 0;
+    color: #bbb; /* 작대기 색상 */
+}
+
+.theater-list a:last-child::after {
+    content: ''; /* 마지막 항목의 작대기는 표시하지 않음 */
+}
+
+
+
+.theater-item {
+    font-size: 1rem;
+    color: rgba(255, 255, 255, 0.7); /* 기본 상태 연한 흰색 */
+    text-decoration: none;
+    font-weight: normal; /* 기본 글씨 두께 */
+    transition: color 0.2s ease-in-out, font-weight 0.2s ease-in-out; /* 부드러운 전환 */
+}
+
+.theater-item:hover {
+    text-decoration: none; /* 호버 시 밑줄 제거 */
+}
+
+.theater-item.active {
+    color: #ffffff; /* 선택된 항목은 선명한 흰색 */
+    font-weight: bold; /* 선택된 항목은 굵게 강조 */
+}

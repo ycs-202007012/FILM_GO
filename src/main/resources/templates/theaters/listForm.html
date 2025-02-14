@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>극장 리스트</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" th:href="@{/css/header.css}">
+    <link rel="stylesheet" th:href="@{/css/theater-list.css}">
+</head>
+<body>
+<div th:replace="~{fragments/home-button :: home-header}"></div>
+
+<div class="container mt-5">
+    <!-- 극장 추가 버튼 -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <a th:if="${memberRole != null and memberRole.toString() == 'MASTER'}"
+           th:href="@{/admin/theaters/new}" class="btn btn-danger">+ 극장 추가</a>
+    </div>
+
+    <!-- 극장 리스트 박스 -->
+    <div class="theater-box mb-5">
+        <div class="theater-title">극장 리스트</div>
+        <div class="theater-list">
+            <!-- 극장 이름 표시 -->
+            <a th:each="theater : ${theaters}"
+               th:href="@{/theaters/list(name=${theater.name})}"
+               th:classappend="${theater.name == selectedTheater?.name} ? 'theater-item active' : 'theater-item'"
+               th:text="${theater.name}">
+                극장 이름
+            </a>
+        </div>
+    </div>
+
+    <!-- 선택된 극장 정보 -->
+    <div class="card">
+        <div class="card-header">
+            극장 정보
+        </div>
+        <div class="card-body">
+            <div th:if="${selectedTheater != null}">
+                <p><strong>극장 이름:</strong> <span th:text="${selectedTheater.name}"></span></p>
+                <p><strong>주소:</strong> <span th:text="'주소: ' + ${selectedTheater.address.city} + ' ' + ${selectedTheater.address.street} + ', ' + ${selectedTheater.address.zipcode}"></span></p>
+
+                <!-- 🎬 해당 극장에서 상영 중인 영화 목록 -->
+                <h5 class="mt-3">상영 중인 영화 목록</h5>
+                <ul class="list-group">
+                    <li th:each="theaterMovie : ${selectedTheater.theaterMovies}" class="list-group-item">
+                        <a th:href="@{/movies/{movieId}(movieId=${theaterMovie.movie.id})}"
+                           th:text="${theaterMovie.movie.title}"
+                           class="text-decoration-none">
+                        </a>
+                    </li>
+                </ul>
+            </div>
+
+            <div th:if="${selectedTheater == null}">
+                <p class="text-muted">극장을 선택하세요.</p>
+            </div>
+        </div>
+
+    </div>
+</div>
+</body>
+</html>

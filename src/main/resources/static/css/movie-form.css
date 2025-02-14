@@ -1,0 +1,39 @@
+body {
+    background-color: #f7f7f7;
+    color: #333;
+    font-family: 'Noto Sans', sans-serif;
+}
+
+.card {
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.card-header {
+    font-size: 1.2rem;
+    font-weight: bold;
+    padding: 10px 15px;
+}
+
+.list-group-item {
+    border: none;
+    padding: 10px 15px;
+    transition: background-color 0.2s ease-in-out;
+}
+
+.list-group-item:hover {
+    background-color: #f1f1f1;
+}
+
+.btn-danger {
+    background-color: #e50914;
+    border: none;
+    padding: 10px 20px;
+    font-size: 1rem;
+    font-weight: bold;
+    border-radius: 5px;
+}
+
+.btn-danger:hover {
+    background-color: #d40813;
+}
