@@ -1,0 +1,49 @@
+body {
+    background-color: #ffffff;
+}
+.movie-chart-title {
+    font-size: 2rem;
+    font-weight: bold;
+    margin-bottom: 20px;
+}
+.movie-card {
+    position: relative;
+    margin-bottom: 20px;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease-in-out;
+}
+.movie-card:hover {
+    transform: scale(1.03);
+}
+.movie-card img {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+    cursor: pointer;
+}
+.movie-rank {
+    position: absolute;
+    top: 0;
+    left: 0;
+    background-color: #e71a0f;
+    color: white;
+    font-weight: bold;
+    font-size: 1.2rem;
+    padding: 5px 10px;
+}
+.movie-info {
+    padding: 15px;
+}
+.movie-title {
+    font-size: 1.2rem;
+    font-weight: bold;
+    margin-bottom: 10px;
+    text-align: center;
+}
+.movie-meta {
+    font-size: 0.9rem;
+    color: #666;
+}

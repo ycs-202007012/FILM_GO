@@ -42,32 +42,8 @@ public class MovieController {
     private final MovieService movieService;
     private final TheaterService theaterService;
     private final MovieStore movieStore;
-    private final MovieConverter movieConverter;
     private final TheaterMovieService theaterMovieService;
     private final CommentService commentService;
-
-    @GetMapping("/new")
-    public String createMovie(@ModelAttribute(name = "form") MovieForm form, Model model) {
-        model.addAttribute("theaters", theaterService.findAll(new TheaterSearch(null, TheaterStatus.REGISTERED)));
-        return "movies/createForm";
-    }
-
-    @PostMapping("/new")
-    public String addMovie(@Validated @ModelAttribute(name = "form") MovieForm form, BindingResult bindingResult) {
-        if (bindingResult.hasErrors()) {
-            return "redirect:/movies/new";
-        }
-        List<Theater> theaters = new ArrayList<>();
-        for (Long theaterId : form.getTheaterIds()) {
-            theaters.add(theaterService.findById(theaterId));
-        }
-        Movie movie = movieConverter.toEntity(form);
-        movieService.save(movie);
-
-        theaterMovieService.saveMovieAndTheaters(movie, theaters);
-
-        return "redirect:/";
-    }
 
     @GetMapping("/{movieId}")
     public String findMovie(@PathVariable Long movieId, Model model) {

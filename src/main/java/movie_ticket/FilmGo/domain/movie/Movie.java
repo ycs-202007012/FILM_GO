@@ -47,25 +47,18 @@ public class Movie {
     @JoinColumn(name = "movie_upload_file_id")
     private MovieUploadFile movieUploadFile;
 
-    @Builder.Default
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "movie")
-    private List<MovieUploadFile> movieUploadFiles = new ArrayList<>();
-
     public Movie updateMovie(Movie movie) {
         this.title = movie.getTitle();
         this.time = movie.getTime();
         this.director = movie.getDirector();
         this.price = movie.getPrice();
         this.movieUploadFile = movie.getMovieUploadFile();
-        this.movieUploadFiles.addAll(movie.getMovieUploadFiles());
         this.movieUploadFile.setMovie(this);
-        for (MovieUploadFile uploadFile : movieUploadFiles) {
-            uploadFile.setMovie(this);
-        }
         return this;
     }
 
     public void increaseViewCount() {
         this.viewCount++;
     }
+
 }

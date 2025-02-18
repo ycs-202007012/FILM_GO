@@ -29,4 +29,8 @@ public class MovieUploadFile {
         this.uploadFileName = uploadFileName;
         this.storeFileName = storeFIleName;
     }
+
+    public void updateMovieUploadFiles(){
+
+    }
 }

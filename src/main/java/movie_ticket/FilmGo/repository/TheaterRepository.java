@@ -42,7 +42,8 @@ public class TheaterRepository {
     public List<Theater> findAll(TheaterSearch theaterSearch) {
         return query.select(theater)
                 .from(theater)
-                .where(likeName(theaterSearch.getName()), theater.status.eq(TheaterStatus.REGISTERED))
+                .where(likeName(theaterSearch.getName()),
+                        theaterSearch.getStatus() != null ? theater.status.eq(theaterSearch.getStatus()) : null)
                 .fetch();
     }
 
@@ -52,4 +53,5 @@ public class TheaterRepository {
         }
         return null;
     }
+
 }

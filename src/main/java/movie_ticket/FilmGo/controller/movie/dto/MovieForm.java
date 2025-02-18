@@ -33,9 +33,10 @@ public class MovieForm {
 
     @NotNull
     private LocalDate releaseDate;
+
     @NotNull
     private List<Long> theaterIds = new ArrayList<>();
 
     private MultipartFile movieUploadFile;
-    private List<MultipartFile> movieUploadFiles;
+    /*private List<MultipartFile> movieUploadFiles;*/
 }

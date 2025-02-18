@@ -17,6 +17,7 @@ import java.util.List;
 import java.util.Optional;
 
 import static movie_ticket.FilmGo.domain.movie.QMovie.movie;
+import static movie_ticket.FilmGo.domain.theater.QTheater.theater;
 
 
 @Repository
@@ -46,9 +47,11 @@ public class MovieRepository {
     public List<Movie> findAll(MovieSearch movieSearch) {
         return query.select(movie)
                 .from(movie)
-                .where(likeName(movieSearch.getTitle()), movie.status.eq(MovieStatus.ACTIVE))
+                .where(likeName(movieSearch.getTitle()),
+                        movieSearch.getStatus() != null ? movie.status.eq(movieSearch.getStatus()) : null)
                 .fetch();
     }
+
     private BooleanExpression likeName(String title) {
         if (StringUtils.hasText(title)) {
             return movie.title.like("%" + title + "%");

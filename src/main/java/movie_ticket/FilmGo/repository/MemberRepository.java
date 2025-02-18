@@ -60,4 +60,15 @@ public class MemberRepository {
         }
         return null;
     }
+
+    public Optional<Member> findByKakaoId(String kakaoId) {
+        try {
+            Member member = em.createQuery("select m from Member m where m.kakaoId = :kakaoId", Member.class)
+                    .setParameter("kakaoId", kakaoId)
+                    .getSingleResult();
+            return Optional.ofNullable(member);
+        } catch (Exception e) {
+            return Optional.empty();
+        }
+    }
 }

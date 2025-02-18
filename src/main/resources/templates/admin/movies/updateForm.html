@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>영화 수정</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" th:href="@{/css/admin-style.css}">
+    <link rel="stylesheet" th:href="@{/css/header.css}">
+</head>
+<body>
+
+<!-- 헤더 -->
+<div th:replace="~{fragments/home-button :: home-header}"></div>
+
+<div class="container mt-5">
+    <h2 class="text-center">영화 수정</h2>
+
+    <form th:action th:object="${form}" method="post" enctype="multipart/form-data">
+        <div class="mb-3">
+            <label for="title" class="form-label">영화 제목</label>
+            <input type="text" id="title" class="form-control" th:field="*{title}" required>
+        </div>
+
+        <div class="mb-3">
+            <label for="time" class="form-label">상영 시간 (분)</label>
+            <input type="number" id="time" class="form-control" th:field="*{time}" required>
+        </div>
+
+        <div class="mb-3">
+            <label for="releaseDate" class="form-label">개봉일</label>
+            <input type="date" id="releaseDate" class="form-control"
+                   th:field="*{releaseDate}" th:value="${#temporals.format(movie.releaseDate, 'yyyy-MM-dd')}" required>
+        </div>
+
+        <div class="mb-3">
+            <label for="director" class="form-label">감독</label>
+            <input type="text" id="director" class="form-control" th:field="*{director}" required>
+        </div>
+
+        <div class="mb-3">
+            <label for="price" class="form-label">가격 (원)</label>
+            <input type="number" id="price" class="form-control" th:field="*{price}" required>
+        </div>
+
+        <div class="mb-3">
+            <label for="synopsis" class="form-label">시놉시스</label>
+            <textarea id="synopsis" class="form-control" rows="4" th:field="*{synopsis}"></textarea>
+        </div>
+
+        <!-- 극장 선택 -->
+        <div class="mb-3">
+            <label th:for="theaterIds" class="form-label">상영관 선택</label>
+            <select th:field="*{theaterIds}" class="form-select" multiple required>
+                <option th:each="theater : ${theaters}"
+                        th:value="${theater.id}"
+                        th:text="${theater.name}">
+                </option>
+            </select>
+            <small class="form-text text-muted">Ctrl(Windows) 또는 Command(Mac)을 누른 상태에서 여러 상영관을 선택할 수 있습니다.</small>
+        </div>
+
+        <!-- 메인 이미지 업로드 -->
+        <div class="mb-3">
+            <label class="form-label">현재 메인 이미지</label>
+            <div class="mb-2">
+                <img th:src="@{/movies/images/{filename}(filename=${movie.movieUploadFile.storeFileName})}"
+                     alt="메인 포스터" class="img-thumbnail" style="max-width: 150px;">
+            </div>
+            <input type="file" th:field="*{movieUploadFile}" class="form-control">
+        </div>
+
+        <div class="text-center">
+            <button type="submit" class="btn btn-success">수정 완료</button>
+            <a th:href="@{/movies/list}" class="btn btn-secondary">취소</a>
+        </div>
+    </form>
+</div>
+
+</body>
+</html>

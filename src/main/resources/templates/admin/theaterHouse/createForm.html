@@ -15,18 +15,18 @@
     <form th:action method="post" th:object="${form}">
         <!-- 상영관 번호 -->
         <div class="mb-4">
-            <label for="houseNumber" class="form-label">상영관 번호</label>
-            <input type="text" id="houseNumber" name="houseNumber" th:field="*{houseNumber}" class="form-control shadow-sm"
+            <label th:for="houseNumber" class="form-label">상영관 번호</label>
+            <input type="text" th:field="*{houseName}" class="form-control shadow-sm"
                    placeholder="상영관 번호를 입력하세요 (예: 1, 2A)" required>
-            <div th:if="${#fields.hasErrors('houseNumber')}" class="text-danger">
+            <div th:if="${#fields.hasErrors('houseName')}" class="text-danger">
                 <p th:errors="*{houseNumber}"></p>
             </div>
         </div>
 
         <!-- 좌석 수 -->
         <div class="mb-4">
-            <label for="seat" class="form-label">좌석 수</label>
-            <input type="number" id="seat" name="seat" th:field="*{seat}" class="form-control shadow-sm"
+            <label th:for="seat" class="form-label">좌석 수</label>
+            <input type="number" th:field="*{seat}" class="form-control shadow-sm"
                    placeholder="좌석 수를 입력하세요" required>
             <div th:if="${#fields.hasErrors('seat')}" class="text-danger">
                 <p th:errors="*{seat}"></p>

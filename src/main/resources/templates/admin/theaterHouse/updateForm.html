@@ -58,24 +58,6 @@
             <div class="invalid-feedback" th:errors="*{houseNumber}"></div>
         </div>
 
-        <!-- 극장 선택 -->
-        <div class="form-group mb-3">
-            <label th:for="theaterId">극장 선택</label>
-            <select th:field="*{theaterId}" class="form-control" required>
-                <option value="" disabled selected>극장을 선택하세요</option>
-                <option th:each="theater : ${theaters}" th:value="${theater.id}" th:text="${theater.name}"
-                        th:selected="${theaterId == theater.id}"></option>
-            </select>
-            <div class="invalid-feedback" th:errors="*{theaterId}"></div>
-        </div>
-
-        <div class="form-group mb-3">
-            <label th:for="seat">좌석 수</label>
-            <input type="text" th:field="*{seat}" class="form-control" placeholder="총 좌석 수 수정"
-                   th:errorClass="is-invalid" required>
-            <div class="invalid-feedback" th:errors="*{seat}"></div>
-        </div>
-
         <!-- 제출 버튼 -->
         <button type="submit" class="btn btn-primary w-100">수정하기</button>
         <a th:href="@{/admin/theater-house/${theaterId}(theaterId=${theaterHouse.theaterId})}"

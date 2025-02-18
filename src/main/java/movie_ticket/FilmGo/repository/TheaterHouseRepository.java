@@ -24,9 +24,9 @@ public class TheaterHouseRepository {
         return em.find(TheaterHouse.class, id);
     }
 
-    public Optional<TheaterHouse> findByNumber(String number, Long theaterId) {
-        return em.createQuery("select t from TheaterHouse t where t.houseNumber = :number and t.theater.id = :theaterId", TheaterHouse.class)
-                .setParameter("number", number)
+    public Optional<TheaterHouse> findByNumber(String name, Long theaterId) {
+        return em.createQuery("select t from TheaterHouse t where t.houseName = :name and t.theater.id = :theaterId", TheaterHouse.class)
+                .setParameter("name", name)
                 .setParameter("theaterId", theaterId) // theater 객체의 ID를 전달
                 .getResultList()
                 .stream()

@@ -5,13 +5,12 @@ import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import movie_ticket.FilmGo.controller.theaterHouse.domain.TheaterHouseForm;
-import movie_ticket.FilmGo.controller.theaterHouse.domain.TheaterHouseResponse;
-import movie_ticket.FilmGo.converter.TheaterHouseConverter;
 import movie_ticket.FilmGo.domain.member.enums.MemberRole;
 import movie_ticket.FilmGo.domain.theater.Theater;
 import movie_ticket.FilmGo.domain.theater.TheaterHouse;
 import movie_ticket.FilmGo.domain.theater.enums.TheaterStatus;
 import movie_ticket.FilmGo.repository.search.TheaterSearch;
+import movie_ticket.FilmGo.service.SeatService;
 import movie_ticket.FilmGo.service.TheaterHouseService;
 import movie_ticket.FilmGo.service.TheaterService;
 import org.springframework.stereotype.Controller;
@@ -32,7 +31,7 @@ public class TheaterHouseAdminController {
 
     private final TheaterService theaterService;
     private final TheaterHouseService theaterHouseService;
-    private final TheaterHouseConverter theaterHouseConverter;
+    private final SeatService seatService;
 
     @GetMapping("/create/{theaterId}") // 상영관 추가 폼
     public String createHouseForm(@ModelAttribute(name = "form") TheaterHouseForm form,
@@ -54,13 +53,16 @@ public class TheaterHouseAdminController {
         }
 
         // 중복 상영관 번호 확인
-        if (theaterHouseService.findByNumber(form.getHouseNumber(), theaterId).isPresent()) {
-            bindingResult.rejectValue("houseNumber", "sameNumber", "이미 해당 이름의 상영관이 존재합니다.");
+        if (theaterHouseService.findByNumber(form.getHouseName(), theaterId).isPresent()) {
+            bindingResult.rejectValue("houseName", "sameNumber", "이미 해당 이름의 상영관이 존재합니다.");
             return "admin/theaterHouse/createForm";
         }
 
-        TheaterHouse theaterHouse = theaterHouseConverter.toEntity(form);
+        Theater theater = theaterService.findById(theaterId);
+
+        TheaterHouse theaterHouse = new TheaterHouse(form.getHouseName(), theater, form.getSeat());
         theaterHouseService.save(theaterHouse);
+
         redirectAttributes.addAttribute("theaterId", theaterId);
 
         return "redirect:/admin/theater-house/{theaterId}"; // 상영관 목록으로 리다이렉트
@@ -69,9 +71,8 @@ public class TheaterHouseAdminController {
     @GetMapping("/update/{theaterHouseId}") // 수정할 상영관의 ID를 기반으로 폼 제공
     public String updateTheaterHouseForm(@PathVariable Long theaterHouseId, Model model) {
         TheaterHouse findHouse = theaterHouseService.findById(theaterHouseId);
-        TheaterHouseResponse response = theaterHouseConverter.toResponse(findHouse);
 
-        model.addAttribute("theaterHouse", response);
+        model.addAttribute("theaterHouse", findHouse);
         model.addAttribute("theaterId", findHouse.getTheater().getId()); // 수정할 상영관의 극장 ID 추가
         model.addAttribute("theaters", theaterService.findAll(new TheaterSearch(null, TheaterStatus.REGISTERED)));
         return "admin/theaterHouse/updateForm"; // editForm은 updateForm으로 변경할 수 있음
@@ -89,7 +90,7 @@ public class TheaterHouseAdminController {
             return "admin/theaterHouse/updateForm";
         }
 
-        Optional<TheaterHouse> existingHouse = theaterHouseService.findByNumber(form.getHouseNumber(), form.getTheaterId());
+        Optional<TheaterHouse> existingHouse = theaterHouseService.findByNumber(form.getHouseName(), form.getTheaterId());
         if (existingHouse.isPresent() && !existingHouse.get().getId().equals(theaterHouseId)) {
             bindingResult.rejectValue("houseNumber", "sameNumber", "이미 해당 이름의 상영관이 존재합니다.");
             return "admin/theaterHouse/updateForm";
@@ -110,7 +111,7 @@ public class TheaterHouseAdminController {
         HttpSession session = request.getSession(false);
 
         model.addAttribute("theaterHouses", theaterHouses);
-        if(session != null){
+        if (session != null) {
             model.addAttribute("memberRole", (MemberRole) session.getAttribute("userRole"));
         }
         return "admin/theaterHouse/theaterHouse-manage";

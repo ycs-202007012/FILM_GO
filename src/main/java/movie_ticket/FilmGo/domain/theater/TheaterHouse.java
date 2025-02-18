@@ -3,7 +3,7 @@ package movie_ticket.FilmGo.domain.theater;
 import jakarta.persistence.*;
 import lombok.*;
 import movie_ticket.FilmGo.controller.theaterHouse.domain.TheaterHouseForm;
-import movie_ticket.FilmGo.exception.NotEnoughStockException;
+import movie_ticket.FilmGo.domain.theater.enums.SeatStatus;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,44 +22,34 @@ public class TheaterHouse {
     @Column(name = "theater_house_id")
     private Long id;
 
-    private String houseNumber;
+    private String houseName;
 
     @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "theater_id")
     private Theater theater;
 
-    private Integer seat;
+    @OneToMany(mappedBy = "theaterHouse", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Seat> seats = new ArrayList<>();
 
     @Builder.Default
-    @OneToMany(mappedBy = "theaterHouse", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "theaterHouse", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<MovieSchedule> movieSchedules = new ArrayList<>();
 
-    public TheaterHouse(String houseNumber, Theater theater, Integer seat) {
-        this.houseNumber = houseNumber;
+    public TheaterHouse(String houseName, Theater theater, Integer seatCount) {
+        this.houseName = houseName;
         this.theater = theater;
-        this.seat = seat;
+        for (int i = 1; i <= seatCount; i++) {
+            seats.add(new Seat(null, i, SeatStatus.AVAILABLE, this));
+        }
     }
 
     public void addMovieSchedule(MovieSchedule movieSchedule) {
         this.getMovieSchedules().add(movieSchedule);
     }
 
-    public void addSeat(int stock) {
-        this.seat += stock;
-    }
-
-    public void removeSeat(int stock) {
-        int restStock = this.seat - stock; // 변경된 좌석 수 계산
-        if (restStock < 0) {
-            throw new NotEnoughStockException("need more stock");
-        }
-        this.seat = restStock; // 계산된 값을 최종적으로 업데이트
-    }
-
 
     public void update(TheaterHouseForm form) {
-        this.houseNumber = form.getHouseNumber();
-        this.seat = form.getSeat();
+        this.houseName = form.getHouseName();
     }
 
 }

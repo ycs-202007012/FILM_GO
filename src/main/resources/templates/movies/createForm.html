@@ -13,7 +13,7 @@
 
 <div class="container movie-form-container">
     <h1>영화 추가</h1>
-    <form th:action="@{/movies/new}" th:object="${form}" method="post" enctype="multipart/form-data">
+    <form th:action="@{/admin/movies/new}" th:object="${form}" method="post" enctype="multipart/form-data">
         <!-- 영화 제목 -->
         <div class="mb-3">
             <label th:for="title" class="form-label">영화 제목</label>
@@ -68,11 +68,10 @@
             <input type="file" th:field="*{movieUploadFile}" class="form-control">
         </div>
 
-        <!-- 추가 이미지 -->
-        <div class="mb-3">
+        <!--<div class="mb-3">
             <label th:for="movieUploadFiles" class="form-label">추가 이미지</label>
             <input type="file" th:field="*{movieUploadFiles}" class="form-control" multiple>
-        </div>
+        </div>-->
 
         <!-- 제출 버튼 -->
         <button type="submit" class="btn btn-primary">영화 추가</button>

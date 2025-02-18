@@ -29,9 +29,9 @@
         <tbody>
         <tr th:each="theaterHouse, iterStat : ${theaterHouses}">
             <td th:text="${iterStat.index + 1}"></td> <!-- Index -->
-            <td th:text="${theaterHouse.houseNumber}">상영관 번호</td>
+            <td th:text="${theaterHouse.houseName}">상영관 이름</td>
             <td th:text="${theaterHouse.theater.name}">극장 이름</td>
-            <td th:text="${theaterHouse.seat}">좌석 수</td>
+            <td th:text="${theaterHouse.seats.size}">좌석 수</td>
             <td>
                 <a th:href="@{/admin/theater-house/update/{id}(id=${theaterHouse.id})}" class="btn btn-sm btn-warning">수정</a>
                 <form th:action="@{/admin/theater-house/delete/{id}(id=${theaterHouse.id})}" method="post"

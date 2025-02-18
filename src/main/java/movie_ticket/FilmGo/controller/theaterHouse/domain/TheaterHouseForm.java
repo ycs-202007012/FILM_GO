@@ -18,7 +18,7 @@ public class TheaterHouseForm {
 
     @NotBlank
     @Size(min = 1, max = 2)
-    private String houseNumber;
+    private String houseName;
 
     @NotNull
     private Long theaterId;

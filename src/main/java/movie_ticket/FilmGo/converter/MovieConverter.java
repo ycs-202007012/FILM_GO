@@ -32,7 +32,7 @@ public class MovieConverter {
     public Movie toEntity(MovieForm form) {
 
         MovieUploadFile mainImage = movieStore.storeFile(form.getMovieUploadFile());
-        List<MovieUploadFile> movieUploadFiles = movieStore.uploadFiles(form.getMovieUploadFiles());
+        /*List<MovieUploadFile> movieUploadFiles = movieStore.uploadFiles(form.getMovieUploadFiles());*/
 
          Movie movie = Movie.builder()
                 .title(form.getTitle())
@@ -42,11 +42,25 @@ public class MovieConverter {
                 .status(MovieStatus.ACTIVE)
                 .synopsis(form.getSynopsis())
                 .movieUploadFile(mainImage)
-                .movieUploadFiles(movieUploadFiles)
+                /*.movieUploadFiles(movieUploadFiles)*/
                 .build();
 
 
         return movie;
     }
 
+    public MovieForm toForm(Movie movie) {
+        List<Long> theaters = new ArrayList<>();
+        for (TheaterMovie theaterMovie : movie.getTheaterMovies()) {
+            theaters.add(theaterMovie.getTheater().getId());
+        }
+        return MovieForm.builder()
+                .title(movie.getTitle())
+                .time(movie.getTime())
+                .director(movie.getDirector())
+                .price(movie.getPrice())
+                .synopsis(movie.getSynopsis())
+                .theaterIds(theaters)
+                .build();
+    }
 }

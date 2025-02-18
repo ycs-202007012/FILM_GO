@@ -52,7 +52,7 @@ public class TheaterMovieRepository {
         return query.select(theaterMovie)
                 .from(theaterMovie)
                 .join(theaterMovie.movie, movie)
-                .where(movieLikeName(movieSearch.getTitle()),movie.status.eq(MovieStatus.ACTIVE))
+                .where(movieLikeName(movieSearch.getTitle()),movie.status.eq(movieSearch.getStatus()))
                 .fetch();
     }
 

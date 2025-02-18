@@ -40,4 +40,8 @@ public class MemberService {
     public Member deleteMember(Long id){
         return memberRepository.deleteMember(id);
     }
+
+    public Optional<Member> findByKakaoId(String kakaoId) {
+        return memberRepository.findByKakaoId(kakaoId);
+    }
 }

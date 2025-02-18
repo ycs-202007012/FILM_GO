@@ -23,7 +23,7 @@ public class TheaterHouseService {
 
     @Transactional(readOnly = false)
     public TheaterHouse save(TheaterHouse theaterHouse) {
-        log.info("[{}]영화관에 [{}]상영관 등록", theaterHouse.getTheater(), theaterHouse.getHouseNumber());
+        log.info("[{}]영화관에 [{}]상영관 등록", theaterHouse.getTheater(), theaterHouse.getHouseName());
         return theaterHouseRepository.save(theaterHouse);
     }
 

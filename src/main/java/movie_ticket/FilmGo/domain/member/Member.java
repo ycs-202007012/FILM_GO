@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 import movie_ticket.FilmGo.domain.member.enums.MemberRole;
 import movie_ticket.FilmGo.domain.member.enums.MemberStatus;
+import movie_ticket.FilmGo.domain.member.enums.SocialType;
 
 @Entity
 @Getter
@@ -31,7 +32,19 @@ public class Member {
 
     @Enumerated(EnumType.STRING)
     private MemberRole role;
+
+    @Enumerated(EnumType.STRING)
+    private SocialType socialType;
     private String phoneNumber;
+
+    public static Member createKakaoMember(String kakaoId, String username) {
+        return Member.builder()
+                .kakaoId(kakaoId)
+                .username(username)
+                .socialType(SocialType.KAKAO)
+                .role(MemberRole.USER)  // 기본 권한 설정
+                .build();
+    }
 
     public Member deleteMember(Member member) {
         this.status = MemberStatus.UNREGISTERED;

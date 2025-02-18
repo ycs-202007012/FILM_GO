@@ -14,6 +14,7 @@
         <a th:if="${memberRole != null and memberRole.toString() == 'MASTER'}"
            th:href="@{/admin/theaters/new}" class="btn btn-danger">+ 극장 추가</a>
     </div>
+
     <h1 class="text-center">Theater Management</h1>
     <!-- Theater List Table -->
     <table class="table table-striped table-hover mt-4">
@@ -44,6 +45,10 @@
                 <!-- Edit Theater -->
                 <a th:href="@{|/admin/theaters/update/${theater.id}|}" class="btn btn-sm btn-success">
                     Edit
+                </a>
+
+                <a th:href="@{|/movieSchedule/${theater.id}/new|}" class="btn btn-sm btn-success">
+                    상영관 추가
                 </a>
                 <!-- Delete Theater -->
                 <form th:action="@{|/admin/theaters/delete/${theater.id}|}" method="post" style="display:inline;">

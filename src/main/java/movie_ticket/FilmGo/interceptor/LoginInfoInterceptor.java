@@ -10,6 +10,10 @@ import movie_ticket.FilmGo.domain.member.enums.MemberRole;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
 
+import static movie_ticket.FilmGo.controller.login.LoginSession.LOG_ID;
+import static movie_ticket.FilmGo.controller.login.LoginSession.USER_ROLE;
+import static movie_ticket.FilmGo.domain.member.enums.MemberRole.MASTER;
+
 @Slf4j
 @RequiredArgsConstructor
 public class LoginInfoInterceptor implements HandlerInterceptor {
@@ -18,10 +22,11 @@ public class LoginInfoInterceptor implements HandlerInterceptor {
         if (modelAndView != null && !isRedirectView(modelAndView)) {
             HttpSession session = request.getSession(false);
             if (session != null) {
-                Long memberId = (Long) session.getAttribute(LoginSession.LOG_ID);
                 modelAndView.addObject("IS_LOGGED_IN", true);
                 modelAndView.addObject("USER_NAME", session.getAttribute("USER_NAME"));
-                modelAndView.addObject("IS_MASTER", session.getAttribute(LoginSession.USER_ROLE).equals(MemberRole.MASTER));
+                modelAndView.addObject("IS_MASTER", session.getAttribute(USER_ROLE).equals(MASTER));
+                modelAndView.addObject("IS_KAKAO_USER", session.getAttribute("KAKAO_ID") != null);
+                modelAndView.addObject("USER_ID",session.getAttribute(LOG_ID));
                 log.info("로그인한 유저");
             } else {
                 modelAndView.addObject("IS_LOGGED_IN", false);
