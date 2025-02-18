@@ -17,8 +17,8 @@
         <h2 class="text-center mb-4">영화 스케줄 추가</h2>
         <form th:action th:object="${form}" method="post">
 
-            <div th:if="${#fields.hasGlobalErrors()}">
-                <p class="field-error" th:each="err : ${#fields.globalErrors()}" th:text="${err}">글로벌 오류 메시지</p>
+            <div th:if="${#fields.hasGlobalErrors()}" class="alert alert-danger">
+                <p th:each="err : ${#fields.globalErrors()}" th:text="${err}">글로벌 오류 메시지</p>
             </div>
 
             <!-- 영화 선택 -->
