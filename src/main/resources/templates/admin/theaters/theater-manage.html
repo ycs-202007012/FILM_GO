@@ -51,7 +51,7 @@
                     스케줄 추가
                 </a>
                 <!-- Delete Theater -->
-                <form th:action="@{|/admin/theaters/delete/${theater.id}|}" method="post" style="display:inline;">
+                <form th:action="@{|/admin/theaters/hard-delete/${theater.id}|}" method="post" style="display:inline;">
                     <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('정말 삭제하시겠습니까?')">삭제
                     </button>
                 </form>

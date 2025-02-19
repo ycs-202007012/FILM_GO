@@ -19,7 +19,7 @@ import static jakarta.persistence.FetchType.LAZY;
 @Builder
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @AllArgsConstructor
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@NoArgsConstructor
 public class Movie {
 
     @Id

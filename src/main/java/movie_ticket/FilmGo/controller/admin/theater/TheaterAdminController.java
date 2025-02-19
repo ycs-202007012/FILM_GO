@@ -4,12 +4,13 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import movie_ticket.FilmGo.controller.login.LoginSession;
 import movie_ticket.FilmGo.controller.theater.dto.TheaterForm;
 import movie_ticket.FilmGo.converter.TheaterConverter;
 import movie_ticket.FilmGo.domain.member.enums.MemberRole;
 import movie_ticket.FilmGo.domain.theater.Theater;
+import movie_ticket.FilmGo.domain.thmv.TheaterMovie;
 import movie_ticket.FilmGo.repository.search.TheaterSearch;
+import movie_ticket.FilmGo.service.TheaterMovieService;
 import movie_ticket.FilmGo.service.TheaterService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -28,6 +29,7 @@ public class TheaterAdminController {
 
     private final TheaterService theaterService;
     private final TheaterConverter theaterConverter;
+    private final TheaterMovieService theaterMovieService;
 
     @GetMapping("/new")
     public String createTheaterForm(@ModelAttribute(name = "form") TheaterForm form) {
@@ -69,8 +71,7 @@ public class TheaterAdminController {
     }
 
     @PostMapping("/update/{theaterId}")
-    public String updateTheater(@ModelAttribute(name = "form") TheaterForm form, @PathVariable Long theaterId,
-                                RedirectAttributes redirectAttributes) {
+    public String updateTheater(@ModelAttribute(name = "form") TheaterForm form, @PathVariable Long theaterId, RedirectAttributes redirectAttributes) {
         theaterService.update(theaterId, form);
         return "redirect:/admin/theaters";
     }
@@ -78,6 +79,19 @@ public class TheaterAdminController {
     @PostMapping("/delete/{id}")
     public String deleteTheater(@PathVariable Long id) {
         theaterService.deleteTheater(id);
+        return "redirect:/admin/theaters";
+    }
+
+    @PostMapping("/hard-delete/{id}")
+    public String hardDeleteTheater(@PathVariable Long id) {
+        Theater theater = theaterService.findById(id);
+
+        theaterService.hardDeleteTheater(theater);
+        /*List<TheaterMovie> theaterMovies = theaterMovieService.findAllByTheater(theater);
+        for (TheaterMovie theaterMovie : theaterMovies) {
+            theaterMovieService.deleteTheaterMovie(theaterMovie);
+        }*/
+
         return "redirect:/admin/theaters";
     }
 }

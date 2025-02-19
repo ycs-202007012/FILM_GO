@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import movie_ticket.FilmGo.controller.theater.dto.TheaterForm;
 import movie_ticket.FilmGo.converter.TheaterConverter;
 import movie_ticket.FilmGo.domain.theater.Theater;
+import movie_ticket.FilmGo.domain.thmv.TheaterMovie;
 import movie_ticket.FilmGo.repository.TheaterRepository;
 import movie_ticket.FilmGo.repository.search.TheaterSearch;
 import org.springframework.stereotype.Service;
@@ -21,6 +22,7 @@ public class TheaterService {
 
     private final TheaterRepository theaterRepository;
     private final TheaterConverter theaterConverter;
+    private final TheaterMovieService theaterMovieService;
 
     @Transactional
     public Theater save(Theater theater) {
@@ -41,7 +43,7 @@ public class TheaterService {
     }
 
     @Transactional
-    public void update(Long theaterId,TheaterForm form){
+    public void update(Long theaterId, TheaterForm form) {
         Theater theater = findById(theaterId);
         theater.updateTheater(form);
     }
@@ -62,5 +64,11 @@ public class TheaterService {
     public void deleteTheater(Long id) {
         Theater theater = findById(id);
         theater.deleteTheater();
+    }
+
+    @Transactional
+    public void hardDeleteTheater(Theater theater) {
+        theaterRepository.deleteTheater(theater);
+
     }
 }

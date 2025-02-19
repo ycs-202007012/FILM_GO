@@ -20,7 +20,6 @@ import java.util.stream.Collectors;
 public class TheaterMovieService {
 
     private final TheaterMovieRepository theaterMovieRepository;
-    private final TheaterService theaterService;
 
     public List<TheaterMovie> findAllByTheater(Theater theater) {
         return theaterMovieRepository.findAllByTheater(theater);
@@ -70,5 +69,14 @@ public class TheaterMovieService {
 
     public List<TheaterMovie> findAllTheaterMovieByMovieSearch(MovieSearch movieSearch) {
         return theaterMovieRepository.findAllTheaterMovieByMovieSearch(movieSearch);
+    }
+
+    @Transactional
+    public void deleteTheaterMovie(TheaterMovie theaterMovie) {
+        theaterMovieRepository.delete(theaterMovie);
+    }
+
+    public List<TheaterMovie> findAllTheaterMovieByMovie(Movie movie) {
+        return theaterMovieRepository.findAllTheaterMovieByMovie(movie);
     }
 }

@@ -23,11 +23,11 @@ public class TheaterMovie {
     @Column(name = "th_mv_id")
     private Long id;
 
-    @ManyToOne(fetch = LAZY, cascade = CascadeType.ALL)
+    @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "movie_id")
     private Movie movie;
 
-    @ManyToOne(fetch = LAZY, cascade = CascadeType.ALL)
+    @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "theater_id")
     private Theater theater;
 

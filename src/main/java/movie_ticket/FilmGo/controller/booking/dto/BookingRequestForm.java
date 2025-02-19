@@ -3,11 +3,13 @@ package movie_ticket.FilmGo.controller.booking.dto;
 import lombok.*;
 
 @Builder
-@NoArgsConstructor
-@AllArgsConstructor
 @Getter
 @Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class BookingRequestForm {
 
-    private String title;
+    private Long movieId;
+
+    private Long theaterId;
 }

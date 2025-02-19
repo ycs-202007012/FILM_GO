@@ -8,35 +8,86 @@
     <link rel="stylesheet" th:href="@{/css/header.css}">
 </head>
 <body>
-
-<!-- 헤더 -->
 <div th:replace="~{fragments/home-button :: home-header}"></div>
 
+<!-- 🎟 영화 예매 컨테이너 -->
 <div class="container mt-5">
-    <h2 class="text-center">영화 예매</h2>
-    <div class="list-group">
-        <a th:each="movie : ${movies}"
-           th:href="@{/tickets(title=${movie.title})}"
-           class="list-group-item list-group-item-action">
-            <span th:text="${movie.title}">영화 제목</span>
-        </a>
+    <h2 class="text-center fw-bold mb-4">🎟 영화 예매</h2>
+
+    <div class="row">
+        <!-- 🎬 영화 선택 -->
+        <div class="col-3">
+            <h5 class="fw-bold">🎬 현재 상영 중인 영화</h5>
+            <ul class="list-group movie-list">
+                <li th:each="movie : ${movies}"
+                    th:classappend="${selectedMovieId == movie.id} ? 'active'"
+                    class="list-group-item">
+                    <a th:href="@{/tickets(movieId=${movie.id})}" class="text-decoration-none">
+                        <span th:text="${movie.title}"></span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+
+        <!-- 🏢 극장 목록 -->
+        <div class="col-3">
+            <h5 class="fw-bold">🏢 상영 중인 극장</h5>
+            <ul class="list-group theater-list">
+                <li th:each="theaterMovie : ${theaterMovieList}"
+                    th:classappend="${selectedTheaterId == theaterMovie.theater.id} ? 'active'"
+                    class="list-group-item">
+                    <a th:href="@{/tickets(movieId=${selectedMovieId}, theaterId=${theaterMovie.theater.id})}" class="text-decoration-none">
+                        <span th:text="${theaterMovie.theater.name}"></span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+
+        <!-- 📅 날짜 선택 -->
+        <div class="col-2">
+            <h5 class="fw-bold">📅 날짜</h5>
+            <ul class="list-group date-list">
+                <li th:each="entry : ${movieScheduleMap}"
+                    class="list-group-item">
+                    <a th:href="@{/tickets(movieId=${selectedMovieId}, theaterId=${selectedTheaterId}, date=${entry.key})}"
+                       class="text-decoration-none">
+                        <span th:text="${entry.key}"></span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+
+        <!-- ⏰ 시간 & 좌석 정보 -->
+        <div class="col-4">
+            <h5 class="fw-bold">⏰ 시간</h5>
+            <div th:each="entry : ${movieScheduleMap}" class="mb-4">
+                <h6 class="fw-bold text-primary" th:text="${entry.key}">날짜</h6>
+                <ul class="list-group">
+                    <li th:each="schedule : ${entry.value}"
+                        class="list-group-item d-flex justify-content-between align-items-center">
+                        <div>
+                            <span class="fw-bold" th:text="${schedule.theaterHouse.houseName} + '관'">상영관</span>
+                            <span class="badge bg-secondary ms-2"
+                                  th:text="|전체 좌석: ${#lists.size(schedule.theaterHouse.seats)}|"></span>
+                            <span class="badge bg-success ms-2"
+                                  th:text="|잔여 좌석: ${#lists.size(schedule.theaterHouse.seats.?[status.name() == 'AVAILABLE'])}|"></span>
+                        </div>
+                        <div class="text-end">
+                            <span class="text-success fw-bold"
+                                  th:text="|${#temporals.format(schedule.time.startTime, 'HH:mm')} ~ ${#temporals.format(schedule.time.endTime, 'HH:mm')}|">
+                            </span>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
     </div>
 
-    <!-- 상영관 목록 -->
-    <div th:if="${theaterMovieList != null and not #lists.isEmpty(theaterMovieList)}">
-        <h4>상영 중인 극장</h4>
-        <ul class="list-group">
-            <a th:each="theaterMovie : ${theaterMovieList}"
-                th:href="@{/tickets(title=${movie.title})}"
-                class="list-group-item list-group-item-action">
-                <strong th:text="${theaterMovie.theater.name}">극장 이름</strong>
-            </a>
-        </ul>
+    <!-- 🎟 일정이 없을 경우 -->
+    <div th:if="${movieScheduleMap == null or #maps.isEmpty(movieScheduleMap)}"
+         class="alert alert-warning mt-4 text-center">
+        선택한 영화와 극장에 대한 상영 일정이 없습니다.
     </div>
-    <div th:if="${theaterMovieList == null or #lists.isEmpty(theaterMovieList)}" class="alert alert-warning">
-        선택한 영화의 상영관 정보가 없습니다.
-    </div>
-
 </div>
 
 </body>

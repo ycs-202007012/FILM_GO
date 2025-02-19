@@ -47,6 +47,10 @@ public class TheaterRepository {
                 .fetch();
     }
 
+    public void deleteTheater(Theater theater){
+        em.remove(theater);
+    }
+
     private BooleanExpression likeName(String name) {
         if (StringUtils.hasText(name)) {
             return movie.title.like("%" + name + "%");

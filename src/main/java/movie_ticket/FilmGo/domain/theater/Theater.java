@@ -27,7 +27,7 @@ public class Theater {
     private Long id;
     private String name;
 
-    @OneToMany(fetch = LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(fetch = LAZY,cascade = CascadeType.ALL)
     @JoinColumn(name = "theater_movie_id")
     private List<TheaterMovie> theaterMovies = new ArrayList<>();
 

@@ -61,14 +61,6 @@ public class MovieScheduleController {
         }
         model.addAttribute("movies", movies);
 
-        if (form.getEndTime().isBefore(form.getStartTime()) || form.getEndTime().equals(form.getStartTime())) {
-            bindingResult.reject("dayNotMatch", "날짜와 시간을 다시 등록해주세요");
-
-            System.out.println(bindingResult.getGlobalErrors());
-            extracted(model, form, movies, theater);
-            return "schedules/createForm";
-        }
-
         if (movieScheduleService.checkScheduleTime(theaterHouse, new StartEndTime(form.getStartTime(), form.getEndTime()))) {
             bindingResult.reject("dayNotMatch", "이미 존재하는 시간대 입니다");
 
@@ -88,6 +80,14 @@ public class MovieScheduleController {
         MovieSchedule findSchedule = movieScheduleService.findById(id);
         model.addAttribute("movieSchedule", findSchedule);
         return "schedules/scheduleForm";
+    }
+
+    @PostMapping("/delete/{id}")
+    public String removeSchedule(@PathVariable Long id) {
+        MovieSchedule schedule = movieScheduleService.findById(id);
+        movieScheduleService.removeSchedule(schedule);
+
+        return "redirect:/";
     }
 
     private void extracted(Model model, ScheduleForm form, List<Movie> movies, Theater theater) {

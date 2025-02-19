@@ -1,0 +1,29 @@
+.container {
+    max-width: 1200px;
+}
+
+/* 리스트 스타일 */
+.list-group-item {
+    border: none;
+    padding: 10px 15px;
+    cursor: pointer;
+    transition: background 0.2s ease-in-out;
+}
+
+.list-group-item:hover, .list-group-item.active {
+    background-color: #ff6f61;
+    color: white;
+    font-weight: bold;
+}
+
+/* 영화, 극장, 날짜, 시간 섹션 */
+.movie-list, .theater-list, .date-list {
+    max-height: 500px;
+    overflow-y: auto;
+}
+
+/* 배지 스타일 (잔여 좌석) */
+.badge {
+    font-size: 0.9rem;
+    padding: 5px 10px;
+}

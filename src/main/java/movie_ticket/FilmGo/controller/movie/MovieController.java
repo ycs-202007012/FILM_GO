@@ -4,14 +4,9 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import movie_ticket.FilmGo.controller.commnet.dto.CommentForm;
-import movie_ticket.FilmGo.controller.movie.dto.MovieForm;
-import movie_ticket.FilmGo.converter.MovieConverter;
-import movie_ticket.FilmGo.domain.comment.Comment;
 import movie_ticket.FilmGo.domain.member.enums.MemberRole;
 import movie_ticket.FilmGo.domain.movie.Movie;
 import movie_ticket.FilmGo.domain.movie.enums.MovieStatus;
-import movie_ticket.FilmGo.domain.theater.Theater;
 import movie_ticket.FilmGo.domain.theater.enums.TheaterStatus;
 import movie_ticket.FilmGo.domain.thmv.TheaterMovie;
 import movie_ticket.FilmGo.file.MovieStore;
@@ -25,12 +20,9 @@ import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.MalformedURLException;
-import java.util.ArrayList;
 import java.util.List;
 
 @Slf4j
@@ -54,7 +46,6 @@ public class MovieController {
         return "movies/movieForm";
     }
 
-
     @ResponseBody
     @GetMapping("/images/{filename}")
     public Resource downloadImage(@PathVariable String filename) throws MalformedURLException {
@@ -63,7 +54,7 @@ public class MovieController {
 
     @GetMapping("/list")
     public String findMovieList(@RequestParam(required = false) String title, Model model, HttpServletRequest request) {
-        List<Movie> movies = movieService.findAll(new MovieSearch(null, MovieStatus.ACTIVE));
+        List<Movie> movies = movieService.findAll(new MovieSearch(title, MovieStatus.ACTIVE));
         model.addAttribute("movies", movies);
 
         // 상영관 목록 조회

@@ -5,13 +5,12 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
 import movie_ticket.FilmGo.domain.movie.Movie;
+import movie_ticket.FilmGo.domain.movie.QMovie;
 import movie_ticket.FilmGo.domain.movie.enums.MovieStatus;
 import movie_ticket.FilmGo.domain.theater.Theater;
-import movie_ticket.FilmGo.domain.thmv.QTheaterMovie;
 import movie_ticket.FilmGo.domain.thmv.TheaterMovie;
 import movie_ticket.FilmGo.domain.thmv.TheaterMovieStatus;
 import movie_ticket.FilmGo.repository.search.MovieSearch;
-import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 import org.springframework.util.StringUtils;
 
@@ -52,7 +51,7 @@ public class TheaterMovieRepository {
         return query.select(theaterMovie)
                 .from(theaterMovie)
                 .join(theaterMovie.movie, movie)
-                .where(movieLikeName(movieSearch.getTitle()),movie.status.eq(movieSearch.getStatus()))
+                .where(movieLikeName(movieSearch.getTitle()), movie.status.eq(movieSearch.getStatus()))
                 .fetch();
     }
 
@@ -63,4 +62,19 @@ public class TheaterMovieRepository {
         return null;
     }
 
+    public void delete(TheaterMovie theaterMovie) {
+        em.remove(theaterMovie);
+    }
+
+    public List<TheaterMovie> findAllTheaterMovieByMovie(Movie movie) {
+        return query.select(theaterMovie)
+                .from(theaterMovie)
+                .join(theaterMovie.movie, QMovie.movie)
+                .where(movieEquals(movie), QMovie.movie.status.eq(MovieStatus.ACTIVE))
+                .fetch();
+    }
+
+    private BooleanExpression movieEquals(Movie movie) {
+        return (movie != null) ? QMovie.movie.eq(movie) : null;
+    }
 }

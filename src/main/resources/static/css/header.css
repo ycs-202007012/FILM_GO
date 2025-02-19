@@ -56,3 +56,39 @@
 .text-danger {
     color: #ff6f61 !important;
 }
+
+/* 검색창 컨테이너 */
+.search-container {
+    display: flex;
+    justify-content: flex-end; /* 오른쪽 정렬 */
+    padding: 10px 20px; /* 상하 여백 추가 */
+    width: 100%; /* 전체 너비 설정 */
+}
+
+/* 검색 입력창 */
+.search-input {
+    width: 140px; /* 글자만 들어갈 정도 */
+    height: 30px;
+    padding: 5px;
+    font-size: 14px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    outline: none;
+}
+
+/* 검색 버튼 */
+.search-btn {
+    background: #ff6f61; /* CGV 레드 컬러 */
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    margin-left: 5px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background 0.3s ease;
+}
+
+.search-btn:hover {
+    background: #e65c50;
+}
+
