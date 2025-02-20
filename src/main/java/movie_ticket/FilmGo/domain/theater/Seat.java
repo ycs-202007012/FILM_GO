@@ -5,6 +5,8 @@ import lombok.*;
 import movie_ticket.FilmGo.domain.theater.enums.SeatStatus;
 import org.hibernate.annotations.BatchSize;
 
+import java.util.List;
+
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -25,4 +27,17 @@ public class Seat {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "theater_house_id")
     private TheaterHouse theaterHouse;
+
+    @Version
+    private Long version;
+
+    public Seat(int seatNumber, SeatStatus status, TheaterHouse theaterHouse) {
+        this.seatNumber = seatNumber;
+        this.status = status;
+        this.theaterHouse = theaterHouse;
+    }
+
+    public void updateStatus(SeatStatus newStatus) {
+        this.status = newStatus;
+    }
 }

@@ -1,6 +1,9 @@
 package movie_ticket.FilmGo.controller.booking.dto;
 
+import jakarta.validation.constraints.NotNull;
 import lombok.*;
+
+import java.util.List;
 
 @Builder
 @Getter
@@ -9,7 +12,9 @@ import lombok.*;
 @AllArgsConstructor
 public class BookingRequestForm {
 
+    @NotNull
     private Long movieId;
 
-    private Long theaterId;
+    @NotNull
+    private List<Integer> seatIds;
 }

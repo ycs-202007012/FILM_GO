@@ -18,4 +18,8 @@ public class SeatService {
 
     private final SeatRepository seatRepository;
 
+    public Seat findById(Long id){
+        return seatRepository.findById(id);
+    }
+
 }

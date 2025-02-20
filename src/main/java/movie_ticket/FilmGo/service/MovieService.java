@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import movie_ticket.FilmGo.controller.movie.dto.MovieForm;
 import movie_ticket.FilmGo.converter.MovieConverter;
 import movie_ticket.FilmGo.domain.movie.Movie;
+import movie_ticket.FilmGo.domain.movie.enums.MovieStatus;
 import movie_ticket.FilmGo.domain.upload.MovieUploadFile;
 import movie_ticket.FilmGo.file.MovieStore;
 import movie_ticket.FilmGo.repository.MovieRepository;
@@ -60,6 +61,22 @@ public class MovieService {
                 .stream()
                 .sorted(Comparator.comparing(Movie::getViewCount).reversed())
                 .toList();
+    }
+
+    public List<Movie> findByMovieStatusByActive() {
+        return movieRepository.findAll(new MovieSearch(null, MovieStatus.ACTIVE));
+    }
+
+    public List<Movie> getActiveMovies() {
+        return movieRepository.findAll(new MovieSearch(null, MovieStatus.ACTIVE));
+    }
+
+    // 기본 선택된 영화 ID 가져오기
+    public Long getDefaultMovieId(Long movieId, List<Movie> movies) {
+        if (movieId == null && !movies.isEmpty()) {
+            return movies.get(0).getId();
+        }
+        return movieId;
     }
 
 }

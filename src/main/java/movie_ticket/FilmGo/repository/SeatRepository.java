@@ -15,5 +15,8 @@ public class SeatRepository {
     private final EntityManager em;
     private final JPAQueryFactory query;
 
+    public Seat findById(Long id) {
+        return em.find(Seat.class, id);
+    }
 
 }

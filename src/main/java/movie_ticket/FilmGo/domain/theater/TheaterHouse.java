@@ -39,7 +39,7 @@ public class TheaterHouse {
         this.houseName = houseName;
         this.theater = theater;
         for (int i = 1; i <= seatCount; i++) {
-            seats.add(new Seat(null, i, SeatStatus.AVAILABLE, this));
+            seats.add(new Seat(i, SeatStatus.AVAILABLE, this));
         }
     }
 

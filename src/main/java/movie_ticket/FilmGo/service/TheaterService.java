@@ -6,6 +6,7 @@ import movie_ticket.FilmGo.controller.theater.dto.TheaterForm;
 import movie_ticket.FilmGo.converter.TheaterConverter;
 import movie_ticket.FilmGo.domain.theater.Theater;
 import movie_ticket.FilmGo.domain.thmv.TheaterMovie;
+import movie_ticket.FilmGo.repository.MovieRepository;
 import movie_ticket.FilmGo.repository.TheaterRepository;
 import movie_ticket.FilmGo.repository.search.TheaterSearch;
 import org.springframework.stereotype.Service;
@@ -21,8 +22,8 @@ import java.util.Optional;
 public class TheaterService {
 
     private final TheaterRepository theaterRepository;
-    private final TheaterConverter theaterConverter;
     private final TheaterMovieService theaterMovieService;
+    private final MovieRepository movieRepository;
 
     @Transactional
     public Theater save(Theater theater) {
@@ -69,6 +70,17 @@ public class TheaterService {
     @Transactional
     public void hardDeleteTheater(Theater theater) {
         theaterRepository.deleteTheater(theater);
-
     }
+
+    public Long getDefaultTheaterId(Long movieId, Long theaterId) {
+        List<TheaterMovie> theaterMovieList = theaterMovieService.findAllTheaterMovieByMovie(
+                movieRepository.findById(movieId).get()
+        );
+
+        if (theaterId == null && !theaterMovieList.isEmpty()) {
+            return theaterMovieList.get(0).getTheater().getId();
+        }
+        return theaterId;
+    }
+
 }
