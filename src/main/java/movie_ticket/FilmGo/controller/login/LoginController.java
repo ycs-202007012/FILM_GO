@@ -33,9 +33,14 @@ public class LoginController {
 
     @PostMapping("/login")
     public String login(@Validated @ModelAttribute(name = "form") LoginForm form, BindingResult bindingResult,
-                        HttpServletRequest request, @RequestParam(defaultValue = "/") String redirectURL,RedirectAttributes redirectAttributes) {
+                        HttpServletRequest request, @RequestParam(defaultValue = "/") String redirectURL, RedirectAttributes redirectAttributes) {
         if (bindingResult.hasErrors() || loginService.loginCheck(form)) {
             log.info("LOGIN CHECK 오류");
+            return "login/loginForm";
+        }
+
+        if (memberService.findByName(form.getName()).isEmpty() || memberService.checkMemberByPassword(form.getPassword())) {
+            bindingResult.reject("notMatch", "계정이 일치하지 않습니다");
             return "login/loginForm";
         }
 
@@ -45,7 +50,7 @@ public class LoginController {
 
         session.setAttribute(LOG_ID, member.get().getId());
         session.setAttribute(USER_ROLE, member.get().getRole());
-        session.setAttribute("USER_NAME",member.get().getUsername());
+        session.setAttribute("USER_NAME", member.get().getUsername());
 
         redirectAttributes.addFlashAttribute("message", "로그인 성공!");
 

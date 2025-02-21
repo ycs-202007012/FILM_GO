@@ -42,6 +42,17 @@ public class MemberRepository {
         }
     }
 
+    public Optional<Member> checkMemberByPassword(String password) {
+        try {
+            Member member = em.createQuery("select m from Member m where m.password = :password", Member.class)
+                    .setParameter("password", password)
+                    .getSingleResult();
+            return Optional.ofNullable(member);
+        } catch (Exception e) {
+            return Optional.empty();
+        }
+    }
+
     public List<Member> findAll(String username, MemberStatus status) {
         return query.select(member)
                 .from(member)

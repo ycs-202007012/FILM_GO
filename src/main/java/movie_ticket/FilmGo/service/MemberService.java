@@ -29,15 +29,21 @@ public class MemberService {
         return Optional.ofNullable(memberRepository.findById(id));
     }
 
-    public Optional<Member> findByName(String name){
+    public Optional<Member> findByName(String name) {
         return Optional.ofNullable(memberRepository.findByName(name))
                 .orElseThrow(() -> new RuntimeException("존재하지 않는 계정입니다."));
     }
-    public List<Member> findAll(MemberSearch memberSearch){
-        return memberRepository.findAll(memberSearch.getUsername(),memberSearch.getStatus());
+
+    public List<Member> findAll(MemberSearch memberSearch) {
+        return memberRepository.findAll(memberSearch.getUsername(), memberSearch.getStatus());
     }
 
-    public Member deleteMember(Long id){
+    public boolean checkMemberByPassword(String password) {
+        Optional<Member> member = memberRepository.checkMemberByPassword(password);
+        return member.isPresent();
+    }
+
+    public Member deleteMember(Long id) {
         return memberRepository.deleteMember(id);
     }
 
