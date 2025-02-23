@@ -3,10 +3,9 @@ package movie_ticket.FilmGo.service;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import movie_ticket.FilmGo.domain.movie.Movie;
-import movie_ticket.FilmGo.domain.theater.MovieSchedule;
-import movie_ticket.FilmGo.domain.theater.StartEndTime;
-import movie_ticket.FilmGo.domain.theater.Theater;
-import movie_ticket.FilmGo.domain.theater.TheaterHouse;
+import movie_ticket.FilmGo.domain.theater.*;
+import movie_ticket.FilmGo.domain.theater.enums.MovieScheduleStatus;
+import movie_ticket.FilmGo.domain.theater.enums.SeatStatus;
 import movie_ticket.FilmGo.repository.MovieRepository;
 import movie_ticket.FilmGo.repository.MovieScheduleRepository;
 import movie_ticket.FilmGo.repository.TheaterRepository;
@@ -99,4 +98,28 @@ public class MovieScheduleService {
         }
         return selectedDate;
     }
+
+    @Transactional
+    public MovieSchedule createMovieSchedule(Movie movie, TheaterHouse theaterHouse, StartEndTime time) {
+        MovieSchedule schedule = MovieSchedule.builder()
+                .movie(movie)
+                .theaterHouse(theaterHouse)
+                .time(time)
+                .status(MovieScheduleStatus.REGISTERED)
+                .build();
+
+        // 스케줄 생성 시 좌석 초기화
+        List<MovieSeat> movieSeats = new ArrayList<>();
+        for (Seat seat : theaterHouse.getSeats()) {
+            movieSeats.add(MovieSeat.builder()
+                    .seat(seat)
+                    .movieSchedule(schedule)
+                    .status(SeatStatus.AVAILABLE) // 초기 좌석 상태 설정
+                    .build());
+        }
+
+        schedule.setMovieSeats(movieSeats);
+        return movieScheduleRepository.save(schedule);
+    }
+
 }

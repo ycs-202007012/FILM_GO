@@ -21,23 +21,12 @@ public class Seat {
 
     private int seatNumber;
 
-    @Enumerated(EnumType.STRING)
-    private SeatStatus status;
-
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "theater_house_id")
     private TheaterHouse theaterHouse;
 
-    @Version
-    private Long version;
-
-    public Seat(int seatNumber, SeatStatus status, TheaterHouse theaterHouse) {
+    public Seat(int seatNumber, TheaterHouse theaterHouse) {
         this.seatNumber = seatNumber;
-        this.status = status;
         this.theaterHouse = theaterHouse;
-    }
-
-    public void updateStatus(SeatStatus newStatus) {
-        this.status = newStatus;
     }
 }

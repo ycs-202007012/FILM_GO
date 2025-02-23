@@ -7,6 +7,7 @@ import movie_ticket.FilmGo.domain.theater.MovieSchedule;
 import movie_ticket.FilmGo.domain.theater.StartEndTime;
 import movie_ticket.FilmGo.domain.theater.TheaterHouse;
 import movie_ticket.FilmGo.domain.theater.enums.MovieScheduleStatus;
+import movie_ticket.FilmGo.service.MovieScheduleService;
 import movie_ticket.FilmGo.service.MovieService;
 
 @ExChangeEntity
@@ -14,6 +15,7 @@ import movie_ticket.FilmGo.service.MovieService;
 public class TheaterScheduleConverter {
 
     private final MovieService movieService;
+    private final MovieScheduleService movieScheduleService;
 
     public MovieSchedule toEntity(ScheduleForm form, TheaterHouse theaterHouse) {
         return MovieSchedule.builder()

@@ -26,7 +26,7 @@ public class LoginInfoInterceptor implements HandlerInterceptor {
                 modelAndView.addObject("USER_NAME", session.getAttribute("USER_NAME"));
                 modelAndView.addObject("IS_MASTER", session.getAttribute(USER_ROLE).equals(MASTER));
                 modelAndView.addObject("IS_KAKAO_USER", session.getAttribute("KAKAO_ID") != null);
-                modelAndView.addObject("USER_ID",session.getAttribute(LOG_ID));
+                modelAndView.addObject("USER_ID", session.getAttribute(LOG_ID));
                 log.info("로그인한 유저");
             } else {
                 modelAndView.addObject("IS_LOGGED_IN", false);
@@ -34,6 +34,7 @@ public class LoginInfoInterceptor implements HandlerInterceptor {
             }
         }
     }
+
     private boolean isRedirectView(ModelAndView modelAndView) {
         String viewName = modelAndView.getViewName();
         return viewName != null && viewName.startsWith("redirect:");

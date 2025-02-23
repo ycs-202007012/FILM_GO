@@ -10,10 +10,7 @@ import movie_ticket.FilmGo.domain.theater.StartEndTime;
 import movie_ticket.FilmGo.domain.theater.Theater;
 import movie_ticket.FilmGo.domain.theater.TheaterHouse;
 import movie_ticket.FilmGo.domain.thmv.TheaterMovie;
-import movie_ticket.FilmGo.service.MovieScheduleService;
-import movie_ticket.FilmGo.service.TheaterHouseService;
-import movie_ticket.FilmGo.service.TheaterMovieService;
-import movie_ticket.FilmGo.service.TheaterService;
+import movie_ticket.FilmGo.service.*;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -22,6 +19,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Slf4j
 @Controller
@@ -30,10 +28,10 @@ import java.util.List;
 public class MovieScheduleController {
 
     private final MovieScheduleService movieScheduleService;
-    private final TheaterScheduleConverter movieScheduleConverter;
     private final TheaterHouseService theaterHouseService;
     private final TheaterMovieService theaterMovieService;
     private final TheaterService theaterService;
+    private final MovieService movieService;
 
     @GetMapping("/{theaterId}/new")
     public String addMovieScheduleForm(@ModelAttribute("form") ScheduleForm form, Model model, @PathVariable Long theaterId) {
@@ -49,27 +47,29 @@ public class MovieScheduleController {
 
     @PostMapping("/{theaterId}/new")
     public String addMovieSchedule(@ModelAttribute("form") @Validated ScheduleForm form, BindingResult bindingResult, Model model, @PathVariable Long theaterId) {
+
         if (bindingResult.hasErrors()) {
             return "schedules/createForm";
         }
+
         TheaterHouse theaterHouse = theaterHouseService.findById(form.getTheaterHouseId());
         Theater theater = theaterService.findById(theaterId);
+        List<TheaterMovie> theaterMovies = theaterMovieService.findAllByTheater(theater);
 
-        List<Movie> movies = new ArrayList<>();
-        for (TheaterMovie theaterMovie : theaterMovieService.findAllByTheater(theater)) {
-            movies.add(theaterMovie.getMovie());
-        }
+        List<Movie> movies = movieService.findMoviesByTheaterMovieList(theaterMovies);
         model.addAttribute("movies", movies);
 
         if (movieScheduleService.checkScheduleTime(theaterHouse, new StartEndTime(form.getStartTime(), form.getEndTime()))) {
             bindingResult.reject("dayNotMatch", "이미 존재하는 시간대 입니다");
 
-            System.out.println(bindingResult.getGlobalErrors());
             extracted(model, form, movies, theater);
             return "schedules/createForm";
         }
 
-        MovieSchedule entity = movieScheduleConverter.toEntity(form, theaterHouse);
+        Optional<Movie> movie = movieService.findById(form.getMovieId());
+
+        MovieSchedule entity = movieScheduleService.createMovieSchedule(movie.get(), theaterHouse,
+                new StartEndTime(form.getStartTime(), form.getEndTime()));
         movieScheduleService.save(entity);
 
         return "redirect:/";

@@ -55,8 +55,8 @@ public class WebConfig implements WebMvcConfigurer {
     public CommandLineRunner initData() {
         return args -> {
             memberService.save(Member.builder()
-                    .name("kdj1785k@naver.com")
-                    .password(passwordEncoder.encode("tnemforhs1!"))
+                    .name("1")
+                    .password(passwordEncoder.encode("1"))
                     .username("김수용")
                     .age(24)
                     .phoneNumber("010-2763-1785")

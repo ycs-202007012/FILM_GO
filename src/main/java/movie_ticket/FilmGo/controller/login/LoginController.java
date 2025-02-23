@@ -35,12 +35,8 @@ public class LoginController {
     public String login(@Validated @ModelAttribute(name = "form") LoginForm form, BindingResult bindingResult,
                         HttpServletRequest request, @RequestParam(defaultValue = "/") String redirectURL, RedirectAttributes redirectAttributes) {
         if (bindingResult.hasErrors() || loginService.loginCheck(form)) {
-            log.info("LOGIN CHECK 오류");
-            return "login/loginForm";
-        }
-
-        if (memberService.findByName(form.getName()).isEmpty() || memberService.checkMemberByPassword(form.getPassword())) {
             bindingResult.reject("notMatch", "계정이 일치하지 않습니다");
+            log.info("LOGIN CHECK 오류");
             return "login/loginForm";
         }
 

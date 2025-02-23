@@ -22,8 +22,9 @@ public class MovieScheduleRepository {
     private final EntityManager em;
     private final JPAQueryFactory query;
 
-    public void save(MovieSchedule movieSchedule) {
+    public MovieSchedule save(MovieSchedule movieSchedule) {
         em.persist(movieSchedule);
+        return movieSchedule;
     }
 
     /*public Optional<MovieSchedule> findByTheaterHouseAndTime(TheaterSearch theaterSearch, LocalDateTime time) {

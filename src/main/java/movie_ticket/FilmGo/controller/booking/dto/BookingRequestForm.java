@@ -16,5 +16,5 @@ public class BookingRequestForm {
     private Long movieId;
 
     @NotNull
-    private List<Integer> seatIds;
+    private List<Long> seatIds;
 }

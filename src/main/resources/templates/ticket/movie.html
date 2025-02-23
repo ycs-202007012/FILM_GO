@@ -8,51 +8,44 @@
     <link rel="stylesheet" th:href="@{/css/header.css}">
 
     <style>
-        /* 기본 리스트 스타일 */
         .list-group-item {
-            background-color: #f8f9fa; /* 연한 회색 */
-            border: 1px solid #ddd; /* 연한 테두리 */
-            transition: background-color 0.3s ease-in-out; /* 부드러운 효과 */
+            background-color: #f8f9fa;
+            border: 1px solid #ddd;
+            transition: background-color 0.3s ease-in-out;
         }
 
-        /* 리스트 내 링크 스타일 */
         .list-group-item a {
-            color: #444 !important; /* 부드러운 어두운 회색 */
-            font-weight: 500; /* 가독성을 위해 중간 굵기 */
-            text-decoration: none; /* 밑줄 제거 */
+            color: #444 !important;
+            font-weight: 500;
+            text-decoration: none;
             display: block;
-            padding: 10px 15px; /* 클릭 영역 확대 */
+            padding: 10px 15px;
             transition: color 0.3s ease-in-out;
         }
 
-        /* 호버 효과 */
         .list-group-item:hover {
-            background-color: #e9ecef !important; /* 밝은 회색 */
+            background-color: #e9ecef !important;
         }
 
         .list-group-item a:hover {
-            color: #222 !important; /* 어두운 색으로 강조 */
+            color: #222 !important;
             text-decoration: none;
         }
 
-        /* 선택된 항목 (.active) 스타일 */
         .list-group-item.active {
-            background-color: #6c757d !important; /* 부드러운 진회색 */
+            background-color: #6c757d !important;
             color: white !important;
             font-weight: bold;
         }
 
         .list-group-item.active a {
-            color: white !important; /* 선택된 항목의 글씨를 흰색으로 */
+            color: white !important;
         }
 
-        /* 타이틀 스타일 (영화 & 극장) */
         .fw-bold {
-            color: #333; /* 제목 색상 - 너무 검지 않도록 */
+            color: #333;
         }
     </style>
-
-
 </head>
 <body>
 <div th:replace="~{fragments/home-button :: home-header}"></div>
@@ -90,7 +83,7 @@
             </ul>
         </div>
 
-        <!-- 📅 날짜 선택 (모든 날짜 보이도록 유지) -->
+        <!-- 📅 날짜 선택 -->
         <div class="col-2">
             <h5 class="fw-bold">📅 날짜</h5>
             <ul class="list-group date-list">
@@ -104,7 +97,7 @@
             </ul>
         </div>
 
-        <!-- ⏰ 선택한 날짜의 스케줄만 표시 -->
+        <!-- ⏰ 시간 및 좌석 정보 표시 -->
         <div class="col-4">
             <h5 class="fw-bold">⏰ 시간</h5>
 
@@ -116,13 +109,18 @@
                         class="list-group-item d-flex justify-content-between align-items-center">
                         <div>
                             <span class="fw-bold" th:text="${schedule.theaterHouse.houseName} + '관'">상영관</span>
+
+                            <!-- 전체 좌석 수 -->
                             <span class="badge bg-secondary ms-2"
-                                  th:text="|전체 좌석: ${#lists.size(schedule.theaterHouse.seats)}|"></span>
+                                  th:text="|전체 좌석: ${#lists.size(schedule.movieSeats)}|"></span>
+
+                            <!-- 잔여 좌석 수 (AVAILABLE 상태만 필터링) -->
                             <span class="badge bg-success ms-2"
-                                  th:text="|잔여 좌석: ${#lists.size(schedule.theaterHouse.seats.?[status.name() == 'AVAILABLE'])}|"></span>
+                                  th:text="|잔여 좌석: ${#lists.size(schedule.movieSeats.?[status.name() == 'AVAILABLE'])}|"></span>
                         </div>
+
                         <div class="text-end">
-                            <!-- ⏰ 시간 클릭 시 예매 페이지로 이동 -->
+                            <!-- 시간 클릭 시 예매 페이지로 이동 -->
                             <a th:href="@{/tickets/booking/{movieScheduleId}(movieScheduleId=${schedule.id})}"
                                class="btn btn-primary btn-sm fw-bold">
                                 <span th:text="|${#temporals.format(schedule.time.startTime, 'HH:mm')} ~ ${#temporals.format(schedule.time.endTime, 'HH:mm')}|"></span>
@@ -138,18 +136,7 @@
                 선택한 날짜에 대한 상영 일정이 없습니다.
             </div>
         </div>
-
-        <!-- 🎟 예약 버튼 -->
-        <!--<div class="text-center mt-4">
-            <a th:if="${selectedMovieId != null and selectedTheaterId != null and selectedDate != null}"
-               th:href="@{/ticket/booking/{movieScheduleId}(movieScheduleId=${selectedSchedules[0].id})}"
-               class="btn btn-primary fw-bold">
-                예매하기
-            </a>
-        </div>-->
-
     </div>
-</div>
 </div>
 
 </body>

@@ -13,7 +13,7 @@
 
 <div class="container movie-form-container">
     <h1>영화 추가</h1>
-    <form th:action="@{/admin/movies/new}" th:object="${form}" method="post" enctype="multipart/form-data">
+    <form th:action th:object="${form}" method="post" enctype="multipart/form-data">
         <!-- 영화 제목 -->
         <div class="mb-3">
             <label th:for="title" class="form-label">영화 제목</label>

@@ -1,6 +1,7 @@
 package movie_ticket.FilmGo.service;
 
 import lombok.RequiredArgsConstructor;
+import movie_ticket.FilmGo.domain.theater.MovieSeat;
 import movie_ticket.FilmGo.domain.theater.Seat;
 import movie_ticket.FilmGo.domain.theater.TheaterHouse;
 import movie_ticket.FilmGo.domain.theater.enums.SeatStatus;

@@ -38,11 +38,6 @@ public class MemberService {
         return memberRepository.findAll(memberSearch.getUsername(), memberSearch.getStatus());
     }
 
-    public boolean checkMemberByPassword(String password) {
-        Optional<Member> member = memberRepository.checkMemberByPassword(password);
-        return member.isPresent();
-    }
-
     public Member deleteMember(Long id) {
         return memberRepository.deleteMember(id);
     }
