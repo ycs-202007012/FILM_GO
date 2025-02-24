@@ -31,8 +31,8 @@ public class HomeController {
             return "home";
         }
         if (role.equals(MemberRole.MASTER)) {
-            Optional<Member> member = memberService.findById(id);
-            model.addAttribute("member", member.get());
+            Member member = memberService.findById(id);
+            model.addAttribute("member", member);
             return "home";
         }
 

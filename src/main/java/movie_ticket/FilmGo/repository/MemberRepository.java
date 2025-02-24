@@ -27,8 +27,8 @@ public class MemberRepository {
         return member.getId();
     }
 
-    public Member findById(Long id) {
-        return em.find(Member.class, id);
+    public Optional<Member> findById(Long id) {
+        return Optional.ofNullable(em.find(Member.class, id));
     }
 
     public Optional<Member> findByName(String name) {
@@ -61,7 +61,7 @@ public class MemberRepository {
     }
 
     public Member deleteMember(Long id) {
-        Member member = findById(id);
+        Member member = findById(id).get();
         return member.deleteMember(member);
     }
 

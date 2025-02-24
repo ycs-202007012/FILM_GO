@@ -5,6 +5,8 @@ import lombok.*;
 import movie_ticket.FilmGo.domain.member.Member;
 import movie_ticket.FilmGo.domain.theater.enums.SeatStatus;
 
+import java.time.LocalDateTime;
+
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -31,6 +33,8 @@ public class MovieSeat {
     @Enumerated(EnumType.STRING)
     private SeatStatus status;
 
+    private LocalDateTime reservationExpiryTime;
+
     @Version
     private Long version;
 
@@ -43,5 +47,17 @@ public class MovieSeat {
     public void updateStatus(SeatStatus newStatus, Member member) {
         this.member = member;
         this.status = newStatus;
+    }
+
+    public void setStatus(SeatStatus newStatus) {
+        this.status = newStatus;
+    }
+
+    public void setExpiryTime(int minutes) {
+        this.reservationExpiryTime = LocalDateTime.now().plusMinutes(minutes);
+    }
+
+    public boolean isExpired() {
+        return reservationExpiryTime != null && reservationExpiryTime.isBefore(LocalDateTime.now());
     }
 }

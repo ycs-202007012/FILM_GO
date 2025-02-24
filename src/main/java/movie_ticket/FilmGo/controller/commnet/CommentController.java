@@ -8,7 +8,9 @@ import movie_ticket.FilmGo.controller.commnet.dto.CommentForm;
 import movie_ticket.FilmGo.controller.login.LoginSession;
 import movie_ticket.FilmGo.converter.CommentConverter;
 import movie_ticket.FilmGo.domain.comment.Comment;
+import movie_ticket.FilmGo.domain.member.Member;
 import movie_ticket.FilmGo.service.CommentService;
+import movie_ticket.FilmGo.service.MemberService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -26,6 +28,7 @@ import static movie_ticket.FilmGo.controller.login.LoginSession.*;
 @RequiredArgsConstructor
 public class CommentController {
 
+    private final MemberService memberService;
     private final CommentService commentService;
     private final CommentConverter commentConverter;
 
@@ -34,9 +37,9 @@ public class CommentController {
         log.info("🔍 댓글 추가 요청: movieId={}, content={}", movieId, content);
 
         HttpSession session = request.getSession(false);
-        Long memberId = (Long) session.getAttribute(LOG_ID);
 
-        Comment entity = commentConverter.toEntity(movieId, content, memberId);
+        Member member = memberService.findByServletRequest(request);
+        Comment entity = commentConverter.toEntity(movieId, content, member.getId());
         commentService.save(entity);
 
         return "redirect:/movies/" + movieId;

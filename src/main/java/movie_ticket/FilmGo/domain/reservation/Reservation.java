@@ -36,13 +36,12 @@ public class Reservation {
     @JoinColumn(name = "movie_id")
     private Movie movie;
 
-    public static Reservation createReservation(Member member, Movie movie, int count) {
+    public static Reservation createReservation(Member member, Movie movie, int totalPrice) {
         return Reservation.builder()
                 .member(member)
                 .movie(movie)
-                .totalPrice(movie.getPrice() * count)
+                .totalPrice(totalPrice)
                 .status(ReservationStatus.RESERVATION)
                 .reservationTime(LocalDateTime.now()).build();
-
     }
 }

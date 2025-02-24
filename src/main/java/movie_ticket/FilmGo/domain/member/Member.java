@@ -5,6 +5,10 @@ import lombok.*;
 import movie_ticket.FilmGo.domain.member.enums.MemberRole;
 import movie_ticket.FilmGo.domain.member.enums.MemberStatus;
 import movie_ticket.FilmGo.domain.member.enums.SocialType;
+import movie_ticket.FilmGo.domain.reservation.Reservation;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter
@@ -21,6 +25,10 @@ public class Member {
     @Column(unique = true)
     private String kakaoId; //kakao Login Id
 
+    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Reservation> reservations = new ArrayList<>();
+
+
     @Column(unique = true)
     private String name;
     private String password;
@@ -36,6 +44,7 @@ public class Member {
     @Enumerated(EnumType.STRING)
     private SocialType socialType;
     private String phoneNumber;
+    private int money = 0;
 
     public static Member createKakaoMember(String kakaoId, String username) {
         return Member.builder()
@@ -49,5 +58,13 @@ public class Member {
     public Member deleteMember(Member member) {
         this.status = MemberStatus.UNREGISTERED;
         return this;
+    }
+
+    public void chargeMoney(int chargePrice) {
+        this.money += chargePrice;
+    }
+
+    public void minusMoney(int movieMoney) {
+        this.money -= movieMoney;
     }
 }

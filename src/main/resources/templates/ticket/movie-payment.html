@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>영화 결제</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <link rel="stylesheet" th:href="@{/css/header.css}">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+<div th:replace="~{fragments/home-button :: home-header}"></div>
+<div class="container mt-5">
+    <h2 class="text-center">🎬 영화 예매 결제</h2>
+
+    <!-- 영화 정보 -->
+    <div class="card mb-4">
+        <div class="card-body">
+            <h4>🎬 영화 정보</h4>
+            <p><strong>영화 제목:</strong> <span th:text="${schedule.movie.title}"></span></p>
+            <p><strong>상영관:</strong> <span th:text="${schedule.theaterHouse.houseName}"></span></p>
+            <p><strong>극장:</strong> <span th:text="${schedule.theaterHouse.theater.name}"></span></p>
+            <p><strong>상영 시간:</strong>
+                <span th:text="${#temporals.format(schedule.time.startTime, 'yyyy-MM-dd HH:mm')}"></span> ~
+                <span th:text="${#temporals.format(schedule.time.endTime, 'HH:mm')}"></span>
+            </p>
+        </div>
+    </div>
+
+    <!-- 사용자 정보 및 결제 금액 -->
+    <div class="card mb-4">
+        <div class="card-body">
+            <h4>💳 결제 정보</h4>
+            <p><strong>회원 이름:</strong> <span th:text="${member.name}"></span></p>
+            <p><strong>보유 금액:</strong> <span th:text="${member.money}"></span> 원</p>
+            <p><strong>결제 금액:</strong> <span th:text="${form.totalPrice}"></span> 원</p>
+
+            <p><strong>구매 좌석 번호:</strong>
+                <span th:each="seatNumber : ${seatNumbers}" th:text="${seatNumber}"
+                      class="badge bg-primary mx-1"></span>
+            </p>
+        </div>
+    </div>
+
+    <!-- 결제 폼 -->
+    <form th:action th:object="${form}" method="post">
+
+        <!-- 에러 메시지 표시 -->
+        <div th:if="${#fields.hasGlobalErrors()}" class="alert alert-danger mt-3">
+            <p th:each="err : ${#fields.globalErrors()}" th:text="${err}">결제 오류</p>
+        </div>
+
+        <!-- Hidden Input -->
+        <input type="hidden" th:field="*{memberId}"/>
+        <input type="hidden" th:field="*{totalPrice}"/>
+        <input type="hidden" th:field="*{seatIds}"/>
+
+        <!-- 잔액 부족 시 충전 금액 입력 -->
+        <div class="mb-3" th:if="${#fields.hasGlobalErrors()}">
+            <label th:for="chargeMoney" class="form-label">💰 잔액이 부족합니다. 충전 금액 입력</label>
+            <input type="number" th:field="*{chargeMoney}" class="form-control" placeholder="충전 금액 입력">
+        </div>
+
+        <!-- 충전 금액 입력 오류 메시지 -->
+        <div th:if="${#fields.hasErrors('chargeMoney')}" class="alert alert-danger">
+            <p th:errors="*{chargeMoney}">충전 금액 입력 오류</p>
+        </div>
+
+        <!-- 결제 버튼 -->
+        <div class="text-center mt-4">
+            <button type="submit" class="btn btn-success fw-bold">💳 결제하기</button>
+            <a href="/" class="btn btn-secondary">취소</a>
+        </div>
+    </form>
+
+</div>
+
+</body>
+</html>

@@ -1,7 +1,10 @@
 package movie_ticket.FilmGo.service;
 
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import movie_ticket.FilmGo.controller.login.LoginSession;
 import movie_ticket.FilmGo.controller.member.dto.MemberSearch;
 import movie_ticket.FilmGo.domain.member.Member;
 import movie_ticket.FilmGo.repository.MemberRepository;
@@ -25,8 +28,8 @@ public class MemberService {
         return memberRepository.save(member);
     }
 
-    public Optional<Member> findById(Long id) {
-        return Optional.ofNullable(memberRepository.findById(id));
+    public Member findById(Long id) {
+        return memberRepository.findById(id).orElseThrow(() -> new RuntimeException("회원 정보가 조회되지 않습니다 ID:" + id));
     }
 
     public Optional<Member> findByName(String name) {
@@ -44,5 +47,15 @@ public class MemberService {
 
     public Optional<Member> findByKakaoId(String kakaoId) {
         return memberRepository.findByKakaoId(kakaoId);
+    }
+
+    public Member findByServletRequest(HttpServletRequest request) {
+        HttpSession session = request.getSession(false);
+        Long memberId = (Long) session.getAttribute(LoginSession.LOG_ID);
+        if (memberId != null) {
+            return memberRepository.findById(memberId).orElseThrow(() -> new RuntimeException("일치하는 회원이 없습니다"));
+        }
+        String kakaoId = (String) session.getAttribute("KAKAO_ID");
+        return memberRepository.findByKakaoId(kakaoId).orElseThrow(() -> new RuntimeException("일치하는 회원이 없습니다"));
     }
 }

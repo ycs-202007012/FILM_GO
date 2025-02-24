@@ -20,8 +20,7 @@ public class CommentConverter {
     public Comment toEntity(Long movieId, String content, Long memberId) {
         Movie movie = movieService.findById(movieId).orElseThrow(()
                 -> new IllegalArgumentException("해당 영화를 찾을 수 없습니다. ID:" + movieId));
-        Member member = memberService.findById(memberId).orElseThrow(()
-                -> new IllegalArgumentException("해당 회원을 찾을 수 없습니다. ID:" + memberId));
+        Member member = memberService.findById(memberId);
         return Comment.builder()
                 .content(content)
                 .member(member)

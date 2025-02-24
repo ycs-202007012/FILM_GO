@@ -5,8 +5,11 @@ import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import movie_ticket.FilmGo.controller.booking.dto.BookingRequestForm;
+import movie_ticket.FilmGo.controller.booking.dto.PaymentRequestForm;
+import movie_ticket.FilmGo.domain.member.Member;
 import movie_ticket.FilmGo.domain.movie.Movie;
 import movie_ticket.FilmGo.domain.movie.enums.MovieStatus;
+import movie_ticket.FilmGo.domain.reservation.Reservation;
 import movie_ticket.FilmGo.domain.theater.*;
 import movie_ticket.FilmGo.domain.theater.enums.SeatStatus;
 import movie_ticket.FilmGo.domain.theater.enums.TheaterStatus;
@@ -37,6 +40,9 @@ public class BookingController {
     private final MovieService movieService;
     private final TheaterService theaterService;
     private final MovieScheduleService movieScheduleService;
+    private final MemberService memberService;
+    private final MovieSeatService movieSeatService;
+    private final ReservationService reservationService;
 
     @GetMapping("")
     public String booking(@RequestParam(required = false) Long movieId,
@@ -99,18 +105,94 @@ public class BookingController {
         MovieSchedule schedule = movieScheduleService.findById(movieScheduleId);
         seatService.reservePendingSeats(form, schedule, request);
 
-        redirectAttributes.addAttribute(movieScheduleId);
-
-        return "redirect:/booking/{movieScheduleId}/payment";
+        return "redirect:/tickets/booking/" + movieScheduleId + "/payment";
     }
 
     @GetMapping("/booking/{movieScheduleId}/payment")
-    public String paymentForm(@PathVariable Long movieScheduleId, Model model, RedirectAttributes redirectAttributes) {
+    public String paymentForm(@PathVariable Long movieScheduleId, @ModelAttribute(name = "form") PaymentRequestForm form,
+                              Model model, HttpServletRequest request) {
         MovieSchedule schedule = movieScheduleService.findById(movieScheduleId);
-        model.addAttribute("schedule", schedule);
+        Member member = memberService.findByServletRequest(request);
 
-        redirectAttributes.addAttribute(movieScheduleId);
-        return "/booking/{movieScheduleId}/payment";
+        List<Long> seatIds = new ArrayList<>();
+        for (MovieSeat movieSeat : movieSeatService.findSeatsByScheduleAndMember(movieScheduleId, member.getId())) {
+            seatIds.add(movieSeat.getId());
+        }
+
+        form.setSeatIds(seatIds);
+        form.setMemberId(member.getId());
+        form.setTotalPrice(movieSeatService.findSeatsByScheduleAndMember(movieScheduleId, member.getId()).size()
+                * schedule.getMovie().getPrice());
+
+        extracted(model, schedule, member, form.getSeatIds());
+        return "ticket/movie-payment";
+    }
+
+    @PostMapping("/booking/{movieScheduleId}/payment")
+    public String payment(@PathVariable Long movieScheduleId, @ModelAttribute(name = "form") PaymentRequestForm form,
+                          BindingResult bindingResult, Model model) {
+
+        if (bindingResult.hasErrors()) {
+            MovieSchedule schedule = movieScheduleService.findById(movieScheduleId);
+            Member member = memberService.findById(form.getMemberId());
+
+            // 결제 페이지로 다시 데이터 전송
+            extracted(model, schedule, member, form.getSeatIds());
+            return "ticket/movie-payment";
+        }
+
+        System.out.println("member id:" + form.getMemberId());
+        Member member = memberService.findById(form.getMemberId());
+
+        if (form.getChargeMoney() != null) {
+            member.chargeMoney(form.getChargeMoney());
+        }
+
+        // 금액 부족 시 처리
+        if (member.getMoney() < form.getTotalPrice()) {
+            bindingResult.reject("noMoney", "결제 금액이 부족합니다");
+
+            MovieSchedule schedule = movieScheduleService.findById(movieScheduleId);
+            extracted(model, schedule, member, form.getSeatIds());
+
+            return "ticket/movie-payment";
+        }
+
+        // 결제 완료 및 좌석 예약 확정
+        MovieSchedule schedule = movieScheduleService.findById(movieScheduleId);
+        movieSeatService.confirmReservation(form, schedule);
+        Reservation reservation = reservationService.save(Reservation.createReservation(member, schedule.getMovie(), form.getTotalPrice()));
+        member.getReservations().add(reservation);
+
+        return "redirect:/booking/{movieScheduleId}/confirmation";
+    }
+
+    @GetMapping("/booking/{movieScheduleId}/confirmation")
+    public String paymentConfirmation(@PathVariable Long movieScheduleId, Model model, HttpServletRequest request) {
+        MovieSchedule schedule = movieScheduleService.findById(movieScheduleId);
+        Member member = memberService.findByServletRequest(request); // 로그인된 회원 정보 가져오기
+
+        List<MovieSeat> reservedSeats = movieSeatService.findSeatsByScheduleAndMember(movieScheduleId, member.getId());
+        List<Integer> seatNumbers = reservedSeats.stream()
+                .map(seat -> seat.getSeat().getSeatNumber())
+                .toList();
+
+        int totalPrice = reservedSeats.size() * schedule.getMovie().getPrice();
+
+        // 모델에 필요한 데이터 추가
+        model.addAttribute("schedule", schedule);
+        model.addAttribute("member", member);
+        model.addAttribute("seatNumbers", seatNumbers);
+        model.addAttribute("totalPrice", totalPrice);
+
+        return "ticket/payment-success";
+    }
+
+
+    private static void extracted(Model model, MovieSchedule schedule, Member member, List<Long> seatIds) {
+        model.addAttribute("schedule", schedule);
+        model.addAttribute("member", member);
+        model.addAttribute("seatIds", seatIds);
     }
 
 
