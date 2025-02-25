@@ -6,10 +6,9 @@
 Spring Boot를 활용한 영화 사이트
 
 # 🛠️ 기술 스택
-
-Language: Java 17
-
-## Framework: 
+## Language
+Java 17
+## Framework 
 <img src="https://img.shields.io/badge/springboot-6DB33F?style=for-the-badge&logo=springboot&logoColor=white">, Spring Security
 
 Database: h2Database
