@@ -1,10 +1,15 @@
+# FILM_GO
+## 🎀 프로젝트 소개
+### 프로젝트 명: FILM_GO
+### 🗓️ 프로젝트 기간 : 2025.01.20 ~ 2025.02.25(5주)
+### 개인 프로젝트
 Spring Boot를 활용한 영화 사이트
 
 # 기술스택
 
 Language: Java 17
 
-Framework: Spring Boot, Spring Security
+Framework: <img src="https://img.shields.io/badge/springboot#6DB33F?style=for-the-badge&logo=springboot&logoColor=white">, Spring Security
 
 Database: h2Database
 
