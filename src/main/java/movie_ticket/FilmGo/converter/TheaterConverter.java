@@ -17,4 +17,13 @@ public class TheaterConverter {
                 .status(TheaterStatus.REGISTERED)
                 .build();
     }
+
+    public TheaterForm toForm(Theater theater) {
+        return TheaterForm.builder()
+                .name(theater.getName())
+                .city(theater.getAddress().getCity())
+                .zipcode(theater.getAddress().getZipcode())
+                .street(theater.getAddress().getStreet())
+                .build();
+    }
 }

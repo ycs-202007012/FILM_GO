@@ -32,7 +32,6 @@ public class MovieConverter {
     public Movie toEntity(MovieForm form) {
 
         MovieUploadFile mainImage = movieStore.storeFile(form.getMovieUploadFile());
-        /*List<MovieUploadFile> movieUploadFiles = movieStore.uploadFiles(form.getMovieUploadFiles());*/
 
          Movie movie = Movie.builder()
                 .title(form.getTitle())
@@ -42,7 +41,6 @@ public class MovieConverter {
                 .status(MovieStatus.ACTIVE)
                 .synopsis(form.getSynopsis())
                 .movieUploadFile(mainImage)
-                /*.movieUploadFiles(movieUploadFiles)*/
                 .build();
 
 

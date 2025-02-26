@@ -20,7 +20,7 @@
             <!-- 영화 포스터 -->
             <div class="text-center mb-4">
                 <img th:src="@{/movies/images/{filename}(filename=${movie.movieUploadFile.storeFileName})}"
-                     alt="Movie Poster" class="img-fluid rounded">
+                     alt="Movie Poster" class="img">
             </div>
 
             <!-- 영화 정보 -->
@@ -28,7 +28,7 @@
                 <p><strong>감독:</strong> <span th:text="${movie.director}">Director Name</span></p>
                 <p><strong>상영 시간:</strong> <span th:text="${movie.time} + '분'">120분</span></p>
                 <p><strong>가격:</strong> <span th:text="${movie.price} + '원'">15000원</span></p>
-                <p><strong>시놉시스:</strong></p>
+                <p><strong>줄거리:</strong></p>
                 <p th:text="${movie.synopsis}">This is a brief synopsis of the movie.</p>
             </div>
 

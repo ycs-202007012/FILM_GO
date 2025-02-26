@@ -7,6 +7,7 @@ import movie_ticket.FilmGo.controller.member.dto.MemberSearch;
 import movie_ticket.FilmGo.converter.MemberConverter;
 import movie_ticket.FilmGo.domain.member.Member;
 import movie_ticket.FilmGo.service.MemberService;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -23,6 +24,7 @@ public class MemberController {
 
     private final MemberService memberService;
     private final MemberConverter memberConverter;
+    private final PasswordEncoder encoder;
 
     @GetMapping("/members/new")
     public String createMember(@ModelAttribute(name = "form") MemberForm form) {
@@ -43,6 +45,30 @@ public class MemberController {
         Member member = memberConverter.toEntity(form);
 
         memberService.save(member);
+        return "redirect:/";
+    }
+
+    @GetMapping("/members/update/{id}")
+    public String updateMemberForm(@PathVariable Long id, Model model) {
+        Member member = memberService.findById(id);
+        model.addAttribute("form", memberConverter.toForm(member));
+        return "members/updateForm";
+    }
+
+    @PostMapping("/members/update/{id}")
+    public String updateMember(@PathVariable Long id, @Validated @ModelAttribute(name = "form") MemberForm form, BindingResult bindingResult,
+                               Model model) {
+        if (bindingResult.hasErrors()) {
+            return "members/updateForm";
+        }
+        Member member = memberService.findById(id);
+
+        if (!encoder.matches(form.getCheckPassword(), member.getPassword())) {
+            bindingResult.rejectValue("checkPassword", "현재 비밀번호가 일치하지 않습니다");
+            return "members/updateForm";
+        }
+
+        memberService.update(member, form);
         return "redirect:/";
     }
 

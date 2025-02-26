@@ -94,11 +94,18 @@ public class MovieAdminController {
             return "admin/movies/update/" + movieId;
         }
 
+        List<Theater> theaters = new ArrayList<>();
+        for (Long theaterId : form.getTheaterIds()) {
+            theaters.add(theaterService.findById(theaterId));
+        }
+
         Optional<Movie> movie = movieService.findById(movieId);
         Movie entity = movieConverter.toEntity(form);
 
         Movie updateMovie = movie.get().updateMovie(entity);
         movieService.save(updateMovie);
+
+        theaterMovieService.saveMovieAndTheaters(movie.get(), theaters);
 
         log.info("UPDATE_MOVIE={}", updateMovie);
 

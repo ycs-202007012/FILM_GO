@@ -2,6 +2,8 @@ package movie_ticket.FilmGo.domain.member;
 
 import jakarta.persistence.*;
 import lombok.*;
+import movie_ticket.FilmGo.controller.member.dto.MemberForm;
+import movie_ticket.FilmGo.controller.movie.dto.MovieForm;
 import movie_ticket.FilmGo.domain.member.enums.MemberRole;
 import movie_ticket.FilmGo.domain.member.enums.MemberStatus;
 import movie_ticket.FilmGo.domain.member.enums.SocialType;
@@ -27,7 +29,6 @@ public class Member {
 
     @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Reservation> reservations = new ArrayList<>();
-
 
     @Column(unique = true)
     private String name;
@@ -57,6 +58,13 @@ public class Member {
 
     public Member deleteMember(Member member) {
         this.status = MemberStatus.UNREGISTERED;
+        return this;
+    }
+
+    public Member updateMember(Member member, MemberForm form) {
+        this.password = form.getPassword();
+        this.username = form.getUsername();
+        this.phoneNumber = form.getPhoneNumber();
         return this;
     }
 

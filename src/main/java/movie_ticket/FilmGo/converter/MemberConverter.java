@@ -13,6 +13,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 public class MemberConverter {
 
     private final PasswordEncoder encode;
+
     public Member toEntity(MemberForm form) {
         return Member.builder()
                 .name(form.getName())
@@ -22,6 +23,16 @@ public class MemberConverter {
                 .status(MemberStatus.REGISTERED)
                 .role(MemberRole.USER)
                 .phoneNumber(form.getPhoneNumber())
+                .build();
+    }
+
+    public MemberForm toForm(Member member) {
+        return MemberForm.builder()
+                .age(member.getAge())
+                .name(member.getName())
+                .password(member.getPassword())
+                .phoneNumber(member.getPhoneNumber())
+                .username(member.getUsername())
                 .build();
     }
 }

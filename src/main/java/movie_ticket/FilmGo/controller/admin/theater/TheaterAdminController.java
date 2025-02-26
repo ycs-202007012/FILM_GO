@@ -8,7 +8,6 @@ import movie_ticket.FilmGo.controller.theater.dto.TheaterForm;
 import movie_ticket.FilmGo.converter.TheaterConverter;
 import movie_ticket.FilmGo.domain.member.enums.MemberRole;
 import movie_ticket.FilmGo.domain.theater.Theater;
-import movie_ticket.FilmGo.domain.thmv.TheaterMovie;
 import movie_ticket.FilmGo.repository.search.TheaterSearch;
 import movie_ticket.FilmGo.service.TheaterMovieService;
 import movie_ticket.FilmGo.service.TheaterService;
@@ -67,11 +66,12 @@ public class TheaterAdminController {
     @GetMapping("/update/{theaterId}")
     public String updateTheaterForm(@ModelAttribute(name = "form") TheaterForm form, @PathVariable Long theaterId, Model model) {
         model.addAttribute("theater", theaterService.findById(theaterId));
+        model.addAttribute("form", theaterConverter.toForm(theaterService.findById(theaterId)));
         return "/admin/theaters/updateForm";
     }
 
     @PostMapping("/update/{theaterId}")
-    public String updateTheater(@ModelAttribute(name = "form") TheaterForm form, @PathVariable Long theaterId, RedirectAttributes redirectAttributes) {
+    public String updateTheater(@ModelAttribute(name = "form") TheaterForm form, @PathVariable Long theaterId) {
         theaterService.update(theaterId, form);
         return "redirect:/admin/theaters";
     }

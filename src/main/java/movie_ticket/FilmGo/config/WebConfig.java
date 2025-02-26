@@ -28,7 +28,6 @@ public class WebConfig implements WebMvcConfigurer {
     private final MemberService memberService;
     private final TheaterService theaterService;
     private final PasswordEncoder passwordEncoder;
-    private final TheaterHouseService theaterHouseService;
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
@@ -51,7 +50,7 @@ public class WebConfig implements WebMvcConfigurer {
                 .excludePathPatterns("/css/**", "/*.ico", "/error", "/path/to/**", "/images/**");
     }
 
-    @Bean
+    /*@Bean
     public CommandLineRunner initData() {
         return args -> {
             memberService.save(Member.builder()
@@ -75,5 +74,5 @@ public class WebConfig implements WebMvcConfigurer {
                     .status(TheaterStatus.REGISTERED)
                     .build());
         };
-    }
+    }*/
 }

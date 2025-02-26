@@ -70,6 +70,6 @@ public class MovieController {
             model.addAttribute("memberRole", (MemberRole) session.getAttribute("userRole"));
         }
 
-        return "movies/movieList";
+        return "home";
     }
 }

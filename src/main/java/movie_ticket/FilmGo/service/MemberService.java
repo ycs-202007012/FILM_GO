@@ -5,9 +5,11 @@ import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import movie_ticket.FilmGo.controller.login.LoginSession;
+import movie_ticket.FilmGo.controller.member.dto.MemberForm;
 import movie_ticket.FilmGo.controller.member.dto.MemberSearch;
 import movie_ticket.FilmGo.domain.member.Member;
 import movie_ticket.FilmGo.repository.MemberRepository;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -57,5 +59,9 @@ public class MemberService {
         }
         String kakaoId = (String) session.getAttribute("KAKAO_ID");
         return memberRepository.findByKakaoId(kakaoId).orElseThrow(() -> new RuntimeException("일치하는 회원이 없습니다"));
+    }
+    @Transactional
+    public void update(Member member, MemberForm form) {
+        member.updateMember(member, form);
     }
 }
