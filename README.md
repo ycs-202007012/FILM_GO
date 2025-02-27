@@ -13,7 +13,7 @@ Java 17
 
 Database: h2Database
 
-ORM: JPA, QueryDSL
+ORM: <img src="https://img.shields.io/badge/jpa-6DB33F?style=for-the-badge&logo=jpa&logoColor=white">, QueryDSL
 
 Template Engine: Thymeleaf
 
