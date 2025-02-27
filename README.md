@@ -11,7 +11,7 @@ Java 17
 ## Framework 
 <img src="https://img.shields.io/badge/springboot-6DB33F?style=for-the-badge&logo=springboot&logoColor=white">, <img src="https://img.shields.io/badge/springsecurity-6DB33F?style=for-the-badge&logo=springsecurity&logoColor=white">
 
-Database: <img src="https://img.shields.io/badge/h2database-6DB33F?style=for-the-badge&logo=h2database&logoColor=white">
+Database: <img src="https://img.shields.io/badge/h2database-4479A1?style=for-the-badge&logo=h2database&logoColor=white">
 
 ORM: <img src="https://img.shields.io/badge/jpa-6DB33F?style=for-the-badge&logo=jpa&logoColor=white">, <img src="https://img.shields.io/badge/querydsl-4479A1?style=for-the-badge&logo=querydsl&logoColor=white">
 
