@@ -7,6 +7,7 @@ import lombok.extern.slf4j.Slf4j;
 import movie_ticket.FilmGo.domain.member.enums.MemberRole;
 import movie_ticket.FilmGo.domain.movie.Movie;
 import movie_ticket.FilmGo.domain.movie.enums.MovieStatus;
+import movie_ticket.FilmGo.domain.theater.Theater;
 import movie_ticket.FilmGo.domain.theater.enums.TheaterStatus;
 import movie_ticket.FilmGo.domain.thmv.TheaterMovie;
 import movie_ticket.FilmGo.file.MovieStore;
@@ -23,6 +24,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.MalformedURLException;
+import java.util.ArrayList;
 import java.util.List;
 
 @Slf4j
@@ -40,8 +42,12 @@ public class MovieController {
     @GetMapping("/{movieId}")
     public String findMovie(@PathVariable Long movieId, Model model) {
         Movie movie = movieService.findByIdWithViewCount(movieId);
+        List<Theater> theaters = new ArrayList<>();
+        for (TheaterMovie theaterMovie : theaterMovieService.findAllTheaterMovieByMovie(movie)) {
+            theaters.add(theaterMovie.getTheater());
+        }
         model.addAttribute("movie", movie);
-        model.addAttribute("theaters", theaterService.findAll(new TheaterSearch(null, TheaterStatus.REGISTERED)));
+        model.addAttribute("theaters", theaters);
         model.addAttribute("commentList", commentService.findAll(movie));
         return "movies/movieForm";
     }

@@ -77,9 +77,9 @@ public class TheaterService {
                 movieRepository.findById(movieId).get()
         );
 
-        if (theaterId == null && !theaterMovieList.isEmpty()) {
+        /*if (theaterId == null && !theaterMovieList.isEmpty()) {
             return theaterMovieList.get(0).getTheater().getId();
-        }
+        }*/
         return theaterId;
     }
 

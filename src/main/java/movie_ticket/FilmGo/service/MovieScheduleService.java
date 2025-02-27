@@ -16,10 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -54,6 +51,7 @@ public class MovieScheduleService {
     public boolean checkScheduleTime(TheaterHouse theaterHouse, StartEndTime startEndTime) {
         List<MovieSchedule> movieSchedules = theaterHouse.getMovieSchedules();
 
+
         for (MovieSchedule movieSchedule : movieSchedules) {
             LocalDateTime startA = movieSchedule.getTime().getStartTime();
             LocalDateTime endA = movieSchedule.getTime().getEndTime();
@@ -87,9 +85,21 @@ public class MovieScheduleService {
     // 날짜별 그룹화
     public Map<LocalDate, List<MovieSchedule>> groupSchedulesByDate(List<MovieSchedule> movieSchedules) {
         return movieSchedules.stream()
-                .collect(Collectors.groupingBy(schedule -> schedule.getTime().getStartTime().toLocalDate(),
-                        LinkedHashMap::new, Collectors.toList()));
+                .collect(Collectors.groupingBy(
+                        schedule -> schedule.getTime().getStartTime().toLocalDate(),
+                        TreeMap::new,
+                        Collectors.toList()
+                ));
     }
+
+    public List<MovieSchedule> findByMovieScheduleMap(Map<LocalDate, List<MovieSchedule>> movieScheduleMap, LocalDate selectedDate) {
+        return movieScheduleMap
+                .getOrDefault(selectedDate, Collections.emptyList())
+                .stream()
+                .sorted(Comparator.comparing(schedule -> schedule.getTime().getStartTime()))
+                .toList();
+    }
+
 
     // 기본 선택된 날짜 가져오기
     public LocalDate getDefaultSelectedDate(LocalDate selectedDate, Map<LocalDate, List<MovieSchedule>> movieScheduleMap) {

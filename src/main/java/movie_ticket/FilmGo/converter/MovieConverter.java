@@ -33,7 +33,7 @@ public class MovieConverter {
 
         MovieUploadFile mainImage = movieStore.storeFile(form.getMovieUploadFile());
 
-         Movie movie = Movie.builder()
+        Movie movie = Movie.builder()
                 .title(form.getTitle())
                 .time(form.getTime())
                 .director(form.getDirector())

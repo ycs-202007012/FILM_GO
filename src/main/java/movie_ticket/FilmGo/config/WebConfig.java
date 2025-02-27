@@ -9,6 +9,7 @@ import movie_ticket.FilmGo.domain.member.enums.MemberStatus;
 import movie_ticket.FilmGo.domain.theater.Theater;
 import movie_ticket.FilmGo.domain.theater.enums.TheaterStatus;
 import movie_ticket.FilmGo.interceptor.LogInterceptor;
+import movie_ticket.FilmGo.interceptor.LoginCheckInterceptor;
 import movie_ticket.FilmGo.interceptor.LoginInfoInterceptor;
 import movie_ticket.FilmGo.interceptor.UserRoleCheckInterceptor;
 import movie_ticket.FilmGo.service.MemberService;
@@ -25,24 +26,20 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 @RequiredArgsConstructor
 public class WebConfig implements WebMvcConfigurer {
 
-    private final MemberService memberService;
-    private final TheaterService theaterService;
-    private final PasswordEncoder passwordEncoder;
-
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(new LogInterceptor())
                 .order(1)
                 .addPathPatterns("/**")
                 .excludePathPatterns("/css/**", "/*.ico", "/error", "/path/to/**", "/images/**");
-        /*registry.addInterceptor(new LoginCheckInterceptor())
+        registry.addInterceptor(new LoginCheckInterceptor())
                 .order(2)
-                .addPathPatterns("/**")
-                .excludePathPatterns("/css/**", "/*.ico", "/error", "/", "/members/new", "/login", "/path/to/**"
-                        , "/images/**", "/login?logout", "/theaters/**", "/theater/**");*/
+                .addPathPatterns("/tickets/booking/**", "/admin/**")
+                .excludePathPatterns();
+
         registry.addInterceptor(new UserRoleCheckInterceptor())
                 .order(3)
-                .addPathPatterns("/theater/new", "/theaters/new", "/theater/edit", "/theaters/edit", "/theater-house/create/**")
+                .addPathPatterns("/admin/**")
                 .excludePathPatterns();
         registry.addInterceptor(new LoginInfoInterceptor())
                 .order(4)

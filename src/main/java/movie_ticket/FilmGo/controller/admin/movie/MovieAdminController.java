@@ -10,6 +10,7 @@ import movie_ticket.FilmGo.domain.member.enums.MemberRole;
 import movie_ticket.FilmGo.domain.movie.Movie;
 import movie_ticket.FilmGo.domain.theater.Theater;
 import movie_ticket.FilmGo.domain.theater.enums.TheaterStatus;
+import movie_ticket.FilmGo.domain.thmv.TheaterMovie;
 import movie_ticket.FilmGo.repository.search.MovieSearch;
 import movie_ticket.FilmGo.repository.search.TheaterSearch;
 import movie_ticket.FilmGo.service.MovieService;
@@ -103,11 +104,12 @@ public class MovieAdminController {
         Movie entity = movieConverter.toEntity(form);
 
         Movie updateMovie = movie.get().updateMovie(entity);
+        for (TheaterMovie theaterMovie : theaterMovieService.findAllTheaterMovieByMovie(movie.get())) {
+            theaterMovieService.deleteTheaterMovie(theaterMovie);
+        }
+
         movieService.save(updateMovie);
-
         theaterMovieService.saveMovieAndTheaters(movie.get(), theaters);
-
-        log.info("UPDATE_MOVIE={}", updateMovie);
 
         return "redirect:/admin/movies";
     }

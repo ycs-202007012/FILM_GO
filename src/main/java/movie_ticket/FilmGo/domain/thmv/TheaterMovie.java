@@ -27,6 +27,7 @@ public class TheaterMovie {
     @JoinColumn(name = "movie_id")
     private Movie movie;
 
+    @Setter
     @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "theater_id")
     private Theater theater;

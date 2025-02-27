@@ -21,6 +21,4 @@ public class ScheduleForm {
 
     @NotNull
     private LocalDateTime startTime;
-    @NotNull
-    private LocalDateTime endTime;
 }

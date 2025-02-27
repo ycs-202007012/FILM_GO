@@ -50,14 +50,6 @@
                 <div class="invalid-feedback" th:errors="*{startTime}"></div>
             </div>
 
-            <!-- 종료 시간 입력 -->
-            <div class="mb-3">
-                <label th:for="endTime" class="form-label">종료 시간</label>
-                <input type="datetime-local" th:field="*{endTime}" class="form-control"
-                       th:errorClass="field-error" required>
-                <div class="invalid-feedback" th:errors="*{endTime}"></div>
-            </div>
-
             <button type="submit" class="btn btn-primary w-100">추가하기</button>
         </form>
     </div>

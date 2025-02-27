@@ -3,7 +3,6 @@ package movie_ticket.FilmGo.controller.movieSchedule;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import movie_ticket.FilmGo.controller.movieSchedule.domain.ScheduleForm;
-import movie_ticket.FilmGo.converter.TheaterScheduleConverter;
 import movie_ticket.FilmGo.domain.movie.Movie;
 import movie_ticket.FilmGo.domain.theater.MovieSchedule;
 import movie_ticket.FilmGo.domain.theater.StartEndTime;
@@ -59,7 +58,8 @@ public class MovieScheduleController {
         List<Movie> movies = movieService.findMoviesByTheaterMovieList(theaterMovies);
         model.addAttribute("movies", movies);
 
-        if (movieScheduleService.checkScheduleTime(theaterHouse, new StartEndTime(form.getStartTime(), form.getEndTime()))) {
+        Optional<Movie> movie1 = movieService.findById(form.getMovieId());
+        if (movieScheduleService.checkScheduleTime(theaterHouse, new StartEndTime(form.getStartTime(), form.getStartTime().plusMinutes(movie1.get().getTime())))) {
             bindingResult.reject("dayNotMatch", "이미 존재하는 시간대 입니다");
 
             extracted(model, form, movies, theater);
@@ -69,7 +69,7 @@ public class MovieScheduleController {
         Optional<Movie> movie = movieService.findById(form.getMovieId());
 
         MovieSchedule entity = movieScheduleService.createMovieSchedule(movie.get(), theaterHouse,
-                new StartEndTime(form.getStartTime(), form.getEndTime()));
+                new StartEndTime(form.getStartTime(), form.getStartTime().plusMinutes(movie1.get().getTime())));
         movieScheduleService.save(entity);
 
         return "redirect:/";

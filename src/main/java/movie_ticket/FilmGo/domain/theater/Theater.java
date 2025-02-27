@@ -27,7 +27,7 @@ public class Theater {
     private Long id;
     private String name;
 
-    @OneToMany(fetch = LAZY,cascade = CascadeType.ALL)
+    @OneToMany(fetch = LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "theater_movie_id")
     private List<TheaterMovie> theaterMovies = new ArrayList<>();
 
@@ -50,7 +50,7 @@ public class Theater {
         this.status = TheaterStatus.UNREGISTERED;
     }
 
-    public void addTheaterMovie(TheaterMovie theaterMovie){
+    public void addTheaterMovie(TheaterMovie theaterMovie) {
         this.theaterMovies.add(theaterMovie);
     }
 

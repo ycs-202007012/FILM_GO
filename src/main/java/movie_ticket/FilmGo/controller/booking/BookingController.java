@@ -45,29 +45,28 @@ public class BookingController {
     private final ReservationService reservationService;
 
     @GetMapping("")
-    public String booking(@RequestParam(required = false) Long movieId,
-                          @RequestParam(required = false) Long theaterId,
+    public String booking(@RequestParam(defaultValue = "1") Long movieId,
+                          @RequestParam(defaultValue = "1") Long theaterId,
                           @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate selectedDate,
                           Model model) {
 
-        // 1️⃣ 현재 상영 중인 영화 목록 조회
+        // 현재 상영 중인 영화 목록 조회
         List<Movie> movies = movieService.getActiveMovies();
         model.addAttribute("movies", movies);
 
-        // 2️⃣ 기본 영화 및 극장 선택
+        // 기본 영화 및 극장 선택
         movieId = movieService.getDefaultMovieId(movieId, movies);
         theaterId = theaterService.getDefaultTheaterId(movieId, theaterId);
 
         List<TheaterMovie> theaterMovieList = theaterMovieService.findAllTheaterMovieByMovie(movieService.findById(movieId).get());
-        // 3️⃣ 선택된 영화 & 극장의 스케줄 조회
+        // 선택된 영화 & 극장의 스케줄 조회
         List<MovieSchedule> movieSchedules = movieScheduleService.getMovieSchedules(movieId, theaterId);
 
-        // 4️⃣ 날짜별 그룹화 및 선택된 날짜 필터링
+        // 날짜별 그룹화 및 선택된 날짜 필터링
         Map<LocalDate, List<MovieSchedule>> movieScheduleMap = movieScheduleService.groupSchedulesByDate(movieSchedules);
         selectedDate = movieScheduleService.getDefaultSelectedDate(selectedDate, movieScheduleMap);
-        List<MovieSchedule> selectedSchedules = movieScheduleMap.getOrDefault(selectedDate, Collections.emptyList());
+        List<MovieSchedule> selectedSchedules = movieScheduleService.findByMovieScheduleMap(movieScheduleMap, selectedDate);
 
-        // 5️⃣ 모델에 데이터 전달
         model.addAttribute("theaterMovieList", theaterMovieList);
         model.addAttribute("movieScheduleMap", movieScheduleMap);
         model.addAttribute("selectedSchedules", selectedSchedules);

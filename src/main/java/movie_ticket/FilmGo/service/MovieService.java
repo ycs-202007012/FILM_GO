@@ -86,9 +86,9 @@ public class MovieService {
 
     // 기본 선택된 영화 ID 가져오기
     public Long getDefaultMovieId(Long movieId, List<Movie> movies) {
-        if (movieId == null && !movies.isEmpty()) {
+        /*if (movieId == null && !movies.isEmpty()) {
             return movies.get(0).getId();
-        }
+        }*/
         return movieId;
     }
 

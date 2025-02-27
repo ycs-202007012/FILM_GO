@@ -40,7 +40,7 @@ public class Movie {
     @Column(columnDefinition = "TEXT")
     private String synopsis;
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "movie")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "movie",orphanRemoval = true)
     private List<TheaterMovie> theaterMovies = new ArrayList<>();
 
     @OneToOne(fetch = LAZY, cascade = CascadeType.ALL)
