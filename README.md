@@ -17,7 +17,7 @@ ORM: <img src="https://img.shields.io/badge/jpa-6DB33F?style=for-the-badge&logo=
 
 Template Engine: <img src="https://img.shields.io/badge/thymeleaf-005F0F?style=for-the-badge&logo=thymeleaf&logoColor=white">
 
-Build Tool: Gradle
+Build Tool: <img src="https://img.shields.io/badge/gradle-02303A?style=for-the-badge&logo=gradle&logoColor=white">
 
 # 구현 페이지
 ## 메인 화면
