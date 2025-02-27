@@ -12,7 +12,7 @@ Java 17
 <img src="https://img.shields.io/badge/springboot-6DB33F?style=for-the-badge&logo=springboot&logoColor=white">, <img src="https://img.shields.io/badge/springsecurity-6DB33F?style=for-the-badge&logo=springsecurity&logoColor=white">
 
 Database: h2Database
-
+ㄴ
 ORM: <img src="https://img.shields.io/badge/jpa-6DB33F?style=for-the-badge&logo=jpa&logoColor=white">, QueryDSL
 
 Template Engine: Thymeleaf
