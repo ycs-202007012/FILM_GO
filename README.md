@@ -15,7 +15,7 @@ Database: <img src="https://img.shields.io/badge/h2database-4479A1?style=for-the
 
 ORM: <img src="https://img.shields.io/badge/jpa-6DB33F?style=for-the-badge&logo=jpa&logoColor=white">, <img src="https://img.shields.io/badge/querydsl-4479A1?style=for-the-badge&logo=querydsl&logoColor=white">
 
-Template Engine: Thymeleaf
+Template Engine: <img src="https://img.shields.io/badge/thymeleaf-005F0F?style=for-the-badge&logo=thymeleaf&logoColor=white">
 
 Build Tool: Gradle
 
