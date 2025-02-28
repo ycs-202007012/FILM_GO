@@ -34,7 +34,7 @@ public class CommentController {
 
     @PostMapping("/add")
     public String addComment(@RequestParam Long movieId, @RequestParam String content, HttpServletRequest request) {
-        log.info("🔍 댓글 추가 요청: movieId={}, content={}", movieId, content);
+        log.info(" 댓글 추가 요청: movieId={}, content={}", movieId, content);
 
         HttpSession session = request.getSession(false);
 

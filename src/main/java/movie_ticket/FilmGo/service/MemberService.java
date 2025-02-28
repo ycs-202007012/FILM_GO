@@ -5,6 +5,7 @@ import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import movie_ticket.FilmGo.controller.login.LoginSession;
+import movie_ticket.FilmGo.controller.login.dto.KakaoUserInfo;
 import movie_ticket.FilmGo.controller.member.dto.MemberForm;
 import movie_ticket.FilmGo.controller.member.dto.MemberSearch;
 import movie_ticket.FilmGo.domain.member.Member;
@@ -60,6 +61,19 @@ public class MemberService {
         String kakaoId = (String) session.getAttribute("KAKAO_ID");
         return memberRepository.findByKakaoId(kakaoId).orElseThrow(() -> new RuntimeException("일치하는 회원이 없습니다"));
     }
+
+    public Member findOrCreateKakaoMember(KakaoUserInfo kakaoUserInfo) {
+        return memberRepository.findByKakaoId(kakaoUserInfo.getId())
+                .orElseGet(() -> {
+                    Member newMember = Member.createKakaoMember(
+                            kakaoUserInfo.getId(),
+                            kakaoUserInfo.getNickname()
+                    );
+                    Long saveId = memberRepository.save(newMember);
+                    return findById(saveId);
+                });
+    }
+
     @Transactional
     public void update(Member member, MemberForm form) {
         member.updateMember(member, form);

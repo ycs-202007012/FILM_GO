@@ -43,6 +43,12 @@ public class MovieRepository {
                 .fetch();
 
     }
+    private BooleanExpression likeName(String title) {
+        if (StringUtils.hasText(title)) {
+            return movie.title.like("%" + title + "%");
+        }
+        return null;
+    }
 
     public List<Movie> findAll(MovieSearch movieSearch) {
         return query.select(movie)
@@ -50,13 +56,6 @@ public class MovieRepository {
                 .where(likeName(movieSearch.getTitle()),
                         movieSearch.getStatus() != null ? movie.status.eq(movieSearch.getStatus()) : null)
                 .fetch();
-    }
-
-    private BooleanExpression likeName(String title) {
-        if (StringUtils.hasText(title)) {
-            return movie.title.like("%" + title + "%");
-        }
-        return null;
     }
 
     public List<Movie> findByIds(List<Long> ids) {
