@@ -21,6 +21,7 @@ Build Tool: <img src="https://img.shields.io/badge/gradle-02303A?style=for-the-b
 
 # 구현 페이지
 ## 메인 화면
-![image](https://github.com/user-attachments/assets/43bf92ed-2996-483a-89b5-32f13263a566)
+![image](https://github.com/user-attachments/assets/025dfe30-5c06-4c49-a897-343e275c278e)
+
 
 
