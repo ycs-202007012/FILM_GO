@@ -163,7 +163,7 @@ public class BookingController {
         Reservation reservation = reservationService.save(Reservation.createReservation(member, schedule.getMovie(), form.getTotalPrice()));
         member.getReservations().add(reservation);
 
-        return "redirect:/booking/{movieScheduleId}/confirmation";
+        return "redirect:/tickets/booking/{movieScheduleId}/confirmation";
     }
 
     @GetMapping("/booking/{movieScheduleId}/confirmation")

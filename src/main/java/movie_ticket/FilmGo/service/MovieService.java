@@ -80,6 +80,11 @@ public class MovieService {
         return movies;
     }
 
+    @Transactional
+    public void deleteMovie(Movie movie){
+        movie.setStatus(MovieStatus.INACTIVE);
+    }
+
     public List<Movie> getActiveMovies() {
         return movieRepository.findAll(new MovieSearch(null, MovieStatus.ACTIVE));
     }

@@ -114,4 +114,11 @@ public class MovieAdminController {
         return "redirect:/admin/movies";
     }
 
+    @PostMapping("/movies/delete/{movieId}")
+    public String deleteMovie(@PathVariable Long movieId) {
+        movieService.deleteMovie(movieService.findById(movieId).get());
+
+        return "redirect:/admin/movies";
+    }
+
 }
